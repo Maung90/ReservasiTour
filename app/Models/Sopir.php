@@ -9,4 +9,10 @@ class Sopir extends Model
 {
     /** @use HasFactory<\Database\Factories\SopirFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'nama_sopir',
+        'no_telp',
+        'status',
+    ];
 }

@@ -59,7 +59,7 @@ class VendorController extends Controller
 
     public function get($id)
     {
-        $vendor = $vendor = Vendor::find($id);
+        $vendor = Vendor::find($id);
 
         return response()->json($vendor);
     }

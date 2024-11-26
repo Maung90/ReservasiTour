@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Senang Tours & Travel - Vendor')
+@section('title', 'Senang Tours & Travel - User')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}">
@@ -13,11 +13,11 @@
   <div class="px-4 py-3 card-body">
     <div class="row align-items-center">
       <div class="col-9">
-        <h4 class="mb-8 fw-semibold">Data Vendor</h4>
+        <h4 class="mb-8 fw-semibold">Data User</h4>
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a class="text-muted " href="/">Dashboard</a></li>
-            <li class="breadcrumb-item" aria-current="page">Vendor</li>
+            <li class="breadcrumb-item" aria-current="page">User</li>
           </ol>
         </nav>
       </div>
@@ -42,10 +42,10 @@
                 <thead>
                   <tr>
                     <th>No</th>
-                    <th>Nama Vendor</th>
-                    <th>Contact</th>
-                    <th>Bank</th>
-                    <th>Periode Validasi</th>
+                    <th>Nama User</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Role</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
@@ -58,44 +58,45 @@
   </div>
 </div>
 
-<!-- modal create vendor -->
+<!-- modal create User -->
 <div class="modal fade p-1" id="create-modal" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-md">
-    <form id="create-vendor" method="POST">
+    <form id="create-user" method="POST">
       @csrf
       <div class="modal-content">
         <div class="modal-header d-flex align-items-center">
           <h4 class="modal-title" id="myModalLabel">
-            Add Vendor 
+            Add User 
           </h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body"> 
           <div class="form-group">
-            <label for="nama_vendor">Nama Vendor</label>
-            <input type="text" class="form-control" name="nama_vendor" id="nama_vendor" required autocomplete="off">
+            <label for="nama">Nama User</label>
+            <input type="text" class="form-control" name="nama" id="nama" required autocomplete="off">
           </div>
           <div class="form-group">
-            <label for="contact">Contact</label>
-            <input type="text" class="form-control" name="contact" id="contact" required autocomplete="off">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" name="email" id="email" required autocomplete="off">
           </div>
           <div class="form-group">
-            <label for="bank">Bank</label>
-            <input type="text" class="form-control" name="bank" id="bank" required autocomplete="off">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username" id="username" required autocomplete="off">
           </div>
           <div class="form-group">
-            <label for="no_rekening">No Rekening</label>
-            <input type="number" class="form-control" name="no_rekening" id="no_rekening" required autocomplete="off">
+            <label for="notelp">No Telp</label>
+            <input type="text" class="form-control" name="notelp" id="notelp" required autocomplete="off">
           </div>
           <div class="form-group">
-            <label for="account_name">Nama Akun</label>
-            <input type="text" class="form-control" name="account_name" id="account_name" required autocomplete="off">
+            <label for="role">Role</label> 
+            <select name="role" id="role" class="form-control" required>
+              <option selected disabled> Pilih Role</option>
+              <option value="2"> Production </option>
+              <option value="3"> Operation </option>
+              <option value="4"> Accounting </option>
+              <option value="5"> Agent </option>
+            </select>
           </div>
-          <div class="form-group">
-            <label for="validity_period">Periode Validasi</label>
-            <input type="date" class="form-control" name="validity_period" id="validity_period" required autocomplete="off">
-          </div>
-
         </div>
         <div class="modal-footer">
           <button type="submit" class="font-medium btn btn-light-success text-success waves-effect">
@@ -109,78 +110,18 @@
     </form>
   </div> 
 </div> 
-<!-- tutup modal create vendor -->
+<!-- tutup modal create User -->
 
-
-<!-- modal info vendor -->
-<div class="modal fade p-1" id="info-modal" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-md"> 
-    <div class="modal-content">
-      <div class="modal-header d-flex align-items-center">
-        <h4 class="modal-title" id="myModalLabel">
-          Info Vendor 
-        </h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <x-loading-spinner id="loading-info"/>
-
-        <table class="table border" id="table-info">
-          <thead>
-            <tr>
-              <th>Nama Vendor</th>
-              <td id="name_vendor-info">-</td>
-            </tr>
-            <tr>
-              <th>Contact</th>
-              <td id="contact-info">-</td>
-            </tr>
-            <tr>
-              <th>Bank</th>
-              <td id="bank-info">-</td>
-            </tr>
-            <tr>
-              <th>No Rekening</th>
-              <td id="no_rekening-info">-</td>
-            </tr>
-            <tr>
-              <th>Nama AKun</th>
-              <td id="account_name-info">-</td>
-            </tr>
-            <tr>
-              <th>Periode Validasi</th>
-              <td id="validity_period-info">-</td>
-            </tr>
-            <tr>
-              <th>Waktu Dibuat</th>
-              <td id="createted-at-info">-</td>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="font-medium btn btn-light-success text-success waves-effect">
-          Save
-        </button>
-        <button type="button" class="font-medium btn btn-light-danger text-danger waves-effect" data-bs-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>  
-  </div> 
-</div> 
-<!-- tutup modal info vendor -->
-
-<!-- modal update vendor -->
+<!-- modal update User -->
 <div class="modal fade p-1" id="edit-modal" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
   <div class="modal-dialog modal-md">
-    <form id="edit-vendor" method="POST" data-id=''>
+    <form id="edit-user" method="POST" data-id=''>
       @csrf
       @method('PUT')
       <div class="modal-content">
         <div class="modal-header d-flex align-items-center">
           <h4 class="modal-title" id="myModalLabel">
-            Edit Vendor 
+            Edit User 
           </h4>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -188,29 +129,33 @@
 
           <x-loading-spinner id="loading-modal-edit"/> 
           <div id="form-edit">
-            <div class="form-group">
-              <label for="nama_vendor">Nama Vendor</label>
-              <input type="text" class="form-control" name="nama_vendor" id="name_vendor_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="contact">Contact</label>
-              <input type="text" class="form-control" name="contact" id="contact_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="bank">Bank</label>
-              <input type="text" class="form-control" name="bank" id="bank_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="no_rekening">No Rekening</label>
-              <input type="text" class="form-control" name="no_rekening" id="no_rekening_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="account_name">Nama Akun</label>
-              <input type="text" class="form-control" name="account_name" id="account_name_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="validity_period">Periode Validasi</label>
-              <input type="text" class="form-control" name="validity_period" id="validity_period_update" required autocomplete="off">
+            <div class="modal-body"> 
+              <div class="form-group">
+                <label for="nama">Nama User</label>
+                <input type="text" class="form-control" name="nama" id="nama_edit" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" id="email_edit" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" id="username_edit" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="notelp">No Telp</label>
+                <input type="text" class="form-control" name="notelp" id="notelp_edit" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="role">Role</label> 
+                <select name="role" id="role_edit" class="form-control" required>
+                  <option selected disabled> Pilih Role</option>
+                  <option value="2"> Production </option>
+                  <option value="3"> Operation </option>
+                  <option value="4"> Accounting </option>
+                  <option value="5"> Agent </option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
@@ -226,7 +171,7 @@
     </form>
   </div> 
 </div> 
-<!-- tutup modal update vendor -->
+<!-- tutup modal update User -->
 <x-loading-spinner id="loading-spinner"/>
 @endsection
 @section('js')
@@ -235,92 +180,61 @@
   $('#datatables').DataTable({
     processing: true,
     serverSide: true,
-    ajax: '{{ route('Vendor.tableVendor') }}',
+    ajax: '{{ route('user.tableUser') }}',
     columns: [
       { data: 'no', name: 'no' },
-      { data: 'nama_vendor', name: 'nama_vendor' },
-      { data: 'contact', name: 'contact' },
-      { data: 'bank', name: 'bank' },
-      { data: 'validity_period', name: 'validity_period' },
+      { data: 'nama', name: 'nama' },
+      { data: 'email', name: 'email' },
+      { data: 'username', name: 'username' },
+      { data: 'role_id', name: 'role_id' },
       { data: 'action', name: 'action', orderable: false, searchable: false }
       ]
-  });
-
-  // modal info
-  $(document).on('click', '.info-btn', function() {
-    let id = $(this).data('id');
-    
-    $('#table-info').addClass('d-none');
-    $('#loading-info').removeClass('d-none');
-
-    $.ajax({
-      url: '{{ route("vendor.get", ":id") }}'.replace(':id', id),
-      type: 'GET',
-      success: function(response) {
-        let data = response;
-
-        $('#name_vendor-info').text(data.nama_vendor);
-        $('#contact-info').text(data.contact);
-        $('#bank-info').text(data.bank);
-        $('#validity_period-info').text(data.validity_period);
-        $('#account_name-info').text(data.account_name);
-        $('#no_rekening-info').text(data.no_rekening);
-        $('#createted-at-info').text(data.created_at);
-
-        $('#loading-info').addClass('d-none');
-        $('#table-info').removeClass('d-none');
-
-        $('#info-modal').modal('show');
-      },
-      error: function(xhr, status, error) {
-        $('#loading-info').addClass('d-none');
-        $('#table-info').removeClass('d-none');
-        console.error("Error fetching data:", error);
-      }
-    });
   });
 
   // modal edit 
   $(document).on('click', '.edit-btn', function() {
     let id = $(this).data('id');
-    $('#edit-vendor').data('id', id);
+    $('#edit-user').data('id', id);
 
     $('#form-edit').addClass('d-none');
     $('#loading-modal-edit').removeClass('d-none');
 
     $.ajax({
-      url: '{{ route("vendor.get", ":id") }}'.replace(':id', id),
+      url: '{{ route("user.get", ":id") }}'.replace(':id', id),
       type: 'GET',
       success: function(response) {
         $('#form-edit').removeClass('d-none');
         $('#loading-modal-edit').addClass('d-none');
         
         let data = response;
-        $('#name_vendor_update').val(data.nama_vendor);
-        $('#contact_update').val(data.contact);
-        $('#bank_update').val(data.bank);
-        $('#validity_period_update').val(data.validity_period);
-        $('#account_name_update').val(data.account_name);
-        $('#no_rekening_update').val(data.no_rekening);
+        $('#nama_edit').val(data.nama);
+        $('#notelp_edit').val(data.notelp);
+        $('#email_edit').val(data.email);
+        $('#username_edit').val(data.username);
+        $('#role_edit').val(data.role_id);
 
         $('#edit-modal').modal('show');
       },
       error: function(xhr, status, error) {
         $('#form-edit').removeClass('d-none');
         $('#loading-modal-edit').addClass('d-none');
-        console.error("Error fetching data:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal!',
+          text: "Error fetching data"
+        });
       }
     });
   });
 
-  // button submit create vendor
-  $('#create-vendor').submit(function(e) {
+  // button submit create User
+  $('#create-user').submit(function(e) {
     e.preventDefault();
     let formData = new FormData(this);
     $('#loading-spinner').removeClass('d-none');
 
     $.ajax({
-      url: "{{ route('vendor.store') }}",
+      url: "{{ route('user.store') }}",
       type: 'POST',
       data: formData,
       contentType: false,
@@ -330,7 +244,7 @@
 
         $('#create-modal').modal('hide');
         $('#datatables').DataTable().ajax.reload();
-        $('#create-vendor').trigger('reset');
+        $('#create-user').trigger('reset');
 
         Swal.fire({
           title: 'Success!',
@@ -341,7 +255,6 @@
       },
       error: function(xhr, status, error) {
         $('#loading-spinner').addClass('d-none');
-        console.error("Error uploading data:", error);
 
         if (xhr.status === 422) {
           let errors = xhr.responseJSON.errors;
@@ -371,17 +284,17 @@
     });
   });
 
-  //button submit edit vendor
-  $('#edit-vendor').submit(function (e) {
+  //button submit edit User
+  $('#edit-user').submit(function (e) {
     e.preventDefault();
 
     let formData = new FormData(this);
-    let vendorId = $(this).data('id'); 
+    let UserId = $(this).data('id'); 
 
     $('#loading-overlay').removeClass('d-none');
 
     $.ajax({
-      url: "{{ route('vendor.update', ':id') }}".replace(':id', vendorId),
+      url: "{{ route('user.update', ':id') }}".replace(':id', UserId),
       type: 'POST',
       data: formData,
       contentType: false,
@@ -390,7 +303,7 @@
         $('#loading-overlay').addClass('d-none');
 
         $('#edit-modal').modal('hide');
-        $('#edit-vendor').trigger('reset');
+        $('#edit-User').trigger('reset');
 
         $('#datatables').DataTable().ajax.reload();
 
@@ -404,12 +317,54 @@
       error: function (xhr) {
         $('#loading-overlay').addClass('d-none');
 
-        Swal.fire({
-          title: 'Error!',
-          text: xhr.responseJSON?.message || 'Something went wrong!',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
+        if (xhr.status === 422) {
+          let errors = xhr.responseJSON.errors;
+          let errorMessage = '<ul>';
+
+          $.each(errors, function(field, messages) {
+            errorMessage += '<li>' + messages.join(', ') + '</li>';
+          });
+
+          errorMessage += '</ul>';
+
+          Swal.fire({
+            title: 'Validation Error!',
+            html: errorMessage,
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'An unexpected error occurred. Please try again later.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }        if (xhr.status === 422) {
+          let errors = xhr.responseJSON.errors;
+          let errorMessage = '<ul>';
+
+          $.each(errors, function(field, messages) {
+            errorMessage += '<li>' + messages.join(', ') + '</li>';
+          });
+
+          errorMessage += '</ul>';
+
+          Swal.fire({
+            title: 'Validation Error!',
+            html: errorMessage,
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        } else {
+          Swal.fire({
+            title: 'Error!',
+            text: 'An unexpected error occurred. Please try again later.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+          });
+        }
+
       },
     });
   });
@@ -419,7 +374,7 @@
   // button delete 
   $(document).on('click', '.delete-btn', function() {
     let id = $(this).data('id');
-    let deleteUrl = '{{ route("vendor.destroy", ":id") }}'.replace(':id', id);
+    let deleteUrl = '{{ route("user.destroy", ":id") }}'.replace(':id', id);
 
     Swal.fire({
       title: 'Are you sure?',
@@ -431,6 +386,7 @@
       confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
       if (result.isConfirmed) {
+        $('#loading-spinner').removeClass('d-none');
         $.ajax({
           url: deleteUrl,
           type: 'DELETE',
@@ -438,6 +394,7 @@
             _token: '{{ csrf_token() }}'
           },
           success: function(response) {
+            $('#loading-spinner').addClass('d-none');
             $('#datatables').DataTable().ajax.reload();
             Swal.fire({
               title: 'Deleted!',
@@ -447,6 +404,7 @@
             });
           },
           error: function(xhr, status, error) {
+            $('#loading-spinner').addClass('d-none');
             console.error("Error deleting data:", error);
             Swal.fire({
               title: 'Error!',

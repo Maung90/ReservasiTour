@@ -1,40 +1,35 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Sopir; 
+use App\Models\Bahasa; 
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;  
 use Illuminate\Support\Carbon;
 use Yajra\DataTables\DataTables;
 // use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-
-class SopirController extends Controller
+class BahasaController extends Controller
 {
-    public function sopir()
+    public function bahasa()
     {
-        return view('sopir.sopir');
+        return view('bahasa.bahasa');
     }
-    public function tableSopir() 
+    public function tableBahasa() 
     {
-        $sopirs = Sopir::all();
+        $bahasas = Bahasa::all();
 
-        $data = DataTables::of($sopirs)
+        $data = DataTables::of($bahasas)
         ->addColumn('no', function ($row) {
             static $counter = 0;
             return ++$counter;
         })
-        ->addColumn('nama_sopir', function ($row) {
-            return $row->nama_sopir;
+        ->addColumn('nama_bahasa', function ($row) {
+            return $row->nama_bahasa;
         })
-        ->addColumn('no_telp', function ($row) {
-            return $row->no_telp;
-        })
-        ->addColumn('status', function ($row) {
-            return $row->status;
+        ->addColumn('harga_bahasa', function ($row) {
+            return $row->harga_bahasa;
         })
         ->addColumn('action', function ($row) {
             return '
@@ -54,17 +49,17 @@ class SopirController extends Controller
 
     public function get($id)
     {
-        $sopir = Sopir::find($id);
+        $bahasa = Bahasa::find($id);
 
-        return response()->json($sopir);
+        return response()->json($bahasa);
     }
 
     public function destroy($id)
     {
-        $sopir = Sopir::find($id);
+        $bahasa = Bahasa::find($id);
         
-        if ($sopir) {
-            $sopir->delete();
+        if ($bahasa) {
+            $bahasa->delete();
             return response()->json(['message' => 'Data deleted successfully.']);
         } else {
             return response()->json(['message' => 'Data not found.'], 404);
@@ -74,9 +69,8 @@ class SopirController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'nama_sopir' => 'required|string|max:255',
-            'no_telp' => 'required|string|max:50',
-            'status' => 'required|in:available,unavailable',
+            'nama_bahasa' => 'required|unique:bahasas|string|max:255',
+            'harga_bahasa' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -87,24 +81,22 @@ class SopirController extends Controller
         }
 
         try{  
-            $sopir = Sopir::create([
-                'nama_sopir' => $request->nama_sopir,
-                'no_telp' => $request->no_telp,
-                'status' => $request->status,
+            $bahasa = Bahasa::create([
+                'nama_bahasa' => $request->nama_bahasa,
+                'harga_bahasa' => $request->harga_bahasa,
             ]);
 
-            return response()->json(['message' => 'Sopir created successfully!', 'data' => $sopir], 201);
+            return response()->json(['message' => 'Bahasa created successfully!', 'data' => $bahasa], 201);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Sopir created failed.', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Bahasa created failed.', 'error' => $e->getMessage()], 500);
         }
     }
 
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nama_sopir' => 'required|string|max:255',
-            'no_telp' => 'required|string|max:50',
-            'status' => 'required|in:available,unavailable',
+            'nama_bahasa' => 'required|unique:bahasas|string|max:255',
+            'harga_bahasa' => 'required|numeric',
         ]);
 
         if ($validator->fails()) {
@@ -115,17 +107,16 @@ class SopirController extends Controller
         }
         
         try {
-            $sopir = Sopir::findOrFail($id);
+            $bahasa = Bahasa::findOrFail($id);
 
-            $sopir->update([
-                'nama_sopir' => $request->nama_sopir,
-                'no_telp' => $request->no_telp,
-                'status' => $request->status,
+            $bahasa->update([
+                'nama_bahasa' => $request->nama_bahasa,
+                'harga_bahasa' => $request->harga_bahasa,
             ]);
 
-            return response()->json(['message' => 'Sopir updated successfully!', 'data' => $sopir], 200);
+            return response()->json(['message' => 'Bahasa updated successfully!', 'data' => $bahasa], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Sopir updated failed.', 'error' => $e->getMessage()], 500);
+            return response()->json(['message' => 'Bahasa updated failed.', 'error' => $e->getMessage()], 500);
         }
     }
 

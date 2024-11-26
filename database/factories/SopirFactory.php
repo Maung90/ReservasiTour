@@ -22,6 +22,7 @@ class SopirFactory extends Factory
         return [
             'nama_sopir' => $this->faker->name,
             'no_telp' => $this->faker->phoneNumber,
+            'status' => 'available',
         ];
     }
 }

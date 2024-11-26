@@ -23,11 +23,17 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        static $roleIds = [1, 2, 3, 4, 5];
+        static $index = 0;
+
         return [
-            'name' => fake()->name(),
+            'nama' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
+            'username' => fake()->unique()->username(),
             'password' => static::$password ??= Hash::make('password'),
+            'notelp' => $this->faker->phoneNumber,
+            'role_id' => $roleIds[$index++ % count($roleIds)], // Loop berulang ke awal jika lebih dari 5
+            'email_verified_at' => now(),
             'remember_token' => Str::random(10),
         ];
     }

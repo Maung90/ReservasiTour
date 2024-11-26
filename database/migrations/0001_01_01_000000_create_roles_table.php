@@ -11,20 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sopirs', function (Blueprint $table) {
+        Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_sopir');
-            $table->string('no_telp',length: 50);
-            $table->enum('status', ['available','unavailable']);
+            $table->string('role');
             $table->timestamps();
         });
     }
 
-    /** 
+    /**
      * Reverse the migrations.
      */
-  public function down(): void
-  {
-    Schema::dropIfExists('sopirs');
-}
+    public function down(): void
+    {
+        Schema::dropIfExists('roles');
+    }
 };
