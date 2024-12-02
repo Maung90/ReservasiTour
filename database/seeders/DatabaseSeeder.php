@@ -19,6 +19,17 @@ class DatabaseSeeder extends Seeder
             VendorSeeder::class,
             SopirSeeder::class,
             UserSeeder::class,
+            ProdukSeeder::class,
+            ProgramSeeder::class,
+            GuideSeeder::class,
+            KendaraanSeeder::class,
+            ReservasiSeeder::class,
+            TagihanSeeder::class,
+            GuideHasBahasaSeeder::class,
+            DetailProgramSeeder::class,
+            CustomReservasiSeeder::class,
+            FlightSeeder::class,
+            ReservasiActivitiesSeeder::class,
         ]);
     }
 }
