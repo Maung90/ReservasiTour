@@ -5,6 +5,8 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\SopirController;
 use App\Http\Controllers\BahasaController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\KendaraanController;
+use App\Http\Controllers\GuideController;
 
 Route::get('/', function () {
     return view('home');
@@ -52,3 +54,22 @@ Route::controller(UserController::class)->group(function () {
     Route::delete('/user/{id}', 'destroy')->name('user.destroy'); //Delete
 });
 
+Route::controller(KendaraanController::class)->group(function () {
+    Route::get('/kendaraan/table/kendaraan', 'tableKendaraan')->name('kendaraan.tableKendaraan');
+    Route::get('/kendaraan', 'kendaraan');
+
+    Route::post('/kendaraan', 'store')->name('kendaraan.store'); // Create
+    Route::get('/kendaraan/get/{id}', 'get')->name('kendaraan.get'); //Read
+    Route::put('/kendaraan/{id}', 'update')->name('kendaraan.update'); // Update
+    Route::delete('/kendaraan/{id}', 'destroy')->name('kendaraan.destroy'); //Delete
+});
+
+Route::controller(GuideController::class)->group(function () {
+    Route::get('/guide/table/guide', 'tableGuide')->name('guide.tableGuide');
+    Route::get('/guide', 'guide');
+
+    Route::post('/guide', 'store')->name('guide.store'); // Create
+    Route::get('/guide/get/{id}', 'get')->name('guide.get'); //Read
+    Route::put('/guide/{id}', 'update')->name('guide.update'); // Update
+    Route::delete('/guide/{id}', 'destroy')->name('guide.destroy'); //Delete
+});
