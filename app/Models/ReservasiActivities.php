@@ -13,4 +13,8 @@ class ReservasiActivities extends Model
         'aktivitas',
         'reservasi_id',
     ];
+     public function reservasi()
+    {
+        return $this->belongsTo(Reservasi::class);
+    }
 }

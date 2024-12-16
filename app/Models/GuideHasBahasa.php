@@ -13,4 +13,16 @@ class GuideHasBahasa extends Model
         'guide_id',
         'bahasa_id',
     ];
+
+    // Relasi balik ke Guide
+    public function guide()
+    {
+        return $this->belongsTo(Guide::class, 'guide_id', 'id');
+    }
+
+    // Relasi ke Bahasa 
+    public function bahasa()
+    {
+        return $this->belongsTo(Bahasa::class, 'bahasa_id', 'id');
+    }
 }

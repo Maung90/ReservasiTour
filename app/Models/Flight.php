@@ -15,4 +15,8 @@ class Flight extends Model
         'time',
         'reservasi_id',
     ];
+    public function reservasi()
+    {
+        return $this->belongsTo(Reservasi::class);
+    }
 }

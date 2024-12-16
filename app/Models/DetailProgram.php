@@ -13,4 +13,9 @@ class DetailProgram extends Model
         'program_id',
         'produk_id',
     ];
+    public function produk()
+    {
+        return $this->belongsTo(Produk::class, 'produk_id');
+    }
+
 }

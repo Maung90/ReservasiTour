@@ -18,6 +18,7 @@
 	<!-- Owl Carousel  -->
 	<link rel="stylesheet" href="{{ asset('assets/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}">
+	<link rel="stylesheet" href="{{ asset('assets/libs/toastr/toastr.css') }}">
 
 	<!-- Core Css -->
 	<link  id="themeColors"  rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
@@ -72,6 +73,15 @@
 						<x-sidebar-item icon="ti ti-table-options" url="program">
 							Program
 						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti ti-shopping-cart" url="reservasi-paket">
+							Paket Reservasi
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti ti-shopping-cart-plus" url="reservasi-custom">
+							Custom Reservasi
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti ti-file-dollar" url="tagihan">
+							Tagihan
+						</x-sidebar-item>
 						<!-- =================== -->
 						<!-- Data Management -->
 						<!-- =================== -->
@@ -79,6 +89,9 @@
 							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
 							<span class="hide-menu">Data Management</span>
 						</li>
+						<x-sidebar-item icon="ti ti ti-shopping-cart" url="reservasi">
+							Reservasi
+						</x-sidebar-item>
 						<x-sidebar-item icon="ti ti-package" url="paket">
 							Paket
 						</x-sidebar-item>
@@ -214,8 +227,7 @@
 			<script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 			<!--  current page js files -->
 			<script src="{{ asset('assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
-			<!-- <script src="{{ asset('assets/libs/apexcharts/dist/apexcharts.min.js') }}"></script> -->
-			<!-- <script src="{{ asset('assets/js/dashboard.js') }}"></script> -->
+			<script src="{{ asset('assets/libs/toastr/toastr.js') }}"></script>
 			@yield('js','')
 		</body>
 		</html>

@@ -7,6 +7,8 @@ use App\Http\Controllers\BahasaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\GuideController;
+use App\Http\Controllers\ReservasiController;
+use App\Http\Controllers\TagihanController;
 
 Route::get('/', function () {
     return view('home');
@@ -36,6 +38,7 @@ Route::controller(SopirController::class)->group(function () {
 Route::controller(BahasaController::class)->group(function () {
     Route::get('/bahasa/table/bahasa', 'tableBahasa')->name('bahasa.tableBahasa');
     Route::get('/bahasa', 'bahasa');
+    Route::get('/bahasa/getAllBahasa','getAllBahasa')->name('bahasa.getAllBahasa');
 
     Route::post('/bahasa', 'store')->name('bahasa.store'); // Create
     Route::get('/bahasa/get/{id}', 'get')->name('bahasa.get'); //Read
@@ -73,3 +76,28 @@ Route::controller(GuideController::class)->group(function () {
     Route::put('/guide/{id}', 'update')->name('guide.update'); // Update
     Route::delete('/guide/{id}', 'destroy')->name('guide.destroy'); //Delete
 });
+
+Route::controller(ReservasiController::class)->group(function () {
+    Route::get('/reservasi/table/reservasi', 'tableReservasi')->name('reservasi.tableReservasi');
+    Route::get('/reservasi', 'reservasi');
+
+    Route::post('/reservasi', 'store')->name('reservasi.store'); // Create
+    Route::get('/reservasi/get/{id}', 'get')->name('reservasi.get'); //Read
+    Route::put('/reservasi/{id}', 'update')->name('reservasi.update'); // Update
+    Route::delete('/reservasi/{id}', 'destroy')->name('reservasi.destroy'); //Delete
+});
+
+Route::controller(TagihanController::class)->group(function () {
+    Route::get('/tagihan', 'tagihan');
+    Route::get('/tagihan/table/tagihan', 'tabletagihan')->name('tagihan.tableTagihan');
+    Route::get('/tagihan/payment/{id}', 'tagihanPayment')->name('tagihan.payment');
+
+    Route::post('/tagihan', 'store')->name('tagihan.store'); // Create
+    Route::get('/tagihan/get/{id}', 'get')->name('tagihan.get'); // Read
+    Route::put('/tagihan/{id}', 'update')->name('tagihan.update'); // Update
+    Route::delete('/tagihan/{id}', 'destroy')->name('tagihan.destroy'); // Delete
+});
+
+Route::post('/tagihan/callback', [TagihanController::class, 'handlePaymentCallback']);
+
+

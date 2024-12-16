@@ -37,7 +37,7 @@ class VendorController extends Controller
             return $row->bank;
         })
         ->addColumn('validity_period', function ($row) {
-            return $row->validity_period;
+            return Carbon::parse($row->validity_period)->format('d F Y');
         })
         ->addColumn('action', function ($row) {
             return '
@@ -53,7 +53,7 @@ class VendorController extends Controller
             ';
 
         })
-            // ->rawColumns(['status_konsul', 'sharing_session', 'status_bayar', 'action'])
+            ->rawColumns(['action'])
         ->make(true);
     }
 

@@ -9,247 +9,85 @@
 
 
 @section('content') 
-<div class="overflow-hidden shadow-none card bg-light-info position-relative">
-  <div class="px-4 py-3 card-body">
-    <div class="row align-items-center">
-      <div class="col-9">
-        <h4 class="mb-8 fw-semibold">Data Vendor</h4>
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a class="text-muted " href="/">Dashboard</a></li>
-            <li class="breadcrumb-item" aria-current="page">Vendor</li>
-          </ol>
-        </nav>
-      </div>
-      <div class="col-3">
-        <div class="text-center mb-n5">  
-          <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt="" class="img-fluid mb-n4">
-        </div>
-      </div>
-    </div>
-    <button class="capitalize btn btn-sm waves-effect waves-light btn-success create-modal" data-bs-toggle="modal" data-bs-target="#create-modal"> <i class="ti ti-plus"></i> Buat Data</button>
-  </div>
-</div>
-
-<div class="card-body">
-  <div class="tab-content" id="pills-tabContent">
-    <div class="tab-pane fade show active" id="pills-account" role="tabpanel" aria-labelledby="pills-account-tab" tabindex="0">
-      <div class="card">
-        <div class="card-body"> 
-          <div class="table">
-            <div class="table-responsive">
-              <table id="datatables" class="table border">
-                <thead>
-                  <tr>
-                    <th>No</th>
-                    <th>Nama Vendor</th>
-                    <th>Contact</th>
-                    <th>Bank</th>
-                    <th>Periode Validasi</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<x-card-breadcrumb title="Vendor"/>
+<x-datatable>
+  <thead>
+    <tr>
+      <th>No</th>
+      <th>Nama Vendor</th>
+      <th>Contact</th>
+      <th>Bank</th>
+      <th>Periode Validasi</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+</x-datatable> 
 
 <!-- modal create vendor -->
-<div class="modal fade p-1" id="create-modal" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-md">
-    <form id="create-vendor" method="POST">
-      @csrf
-      <div class="modal-content">
-        <div class="modal-header d-flex align-items-center">
-          <h4 class="modal-title" id="myModalLabel">
-            Add Vendor 
-          </h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body"> 
-          <div class="form-group">
-            <label for="nama_vendor">Nama Vendor</label>
-            <input type="text" class="form-control" name="nama_vendor" id="nama_vendor" required autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="contact">Contact</label>
-            <input type="text" class="form-control" name="contact" id="contact" required autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="bank">Bank</label>
-            <input type="text" class="form-control" name="bank" id="bank" required autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="no_rekening">No Rekening</label>
-            <input type="number" class="form-control" name="no_rekening" id="no_rekening" required autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="account_name">Nama Akun</label>
-            <input type="text" class="form-control" name="account_name" id="account_name" required autocomplete="off">
-          </div>
-          <div class="form-group">
-            <label for="validity_period">Periode Validasi</label>
-            <input type="date" class="form-control" name="validity_period" id="validity_period" required autocomplete="off">
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="font-medium btn btn-light-success text-success waves-effect">
-            Save
-          </button>
-          <button type="button" class="font-medium btn btn-light-danger text-danger waves-effect" data-bs-dismiss="modal">
-            Close
-          </button>
-        </div>
-      </div> 
-    </form>
-  </div> 
-</div> 
+<x-modal id="create-modal" labelId="createLabel" title="Add Vendor" formId="create-vendor" method="POST">
+  <x-input id="nama_vendor" type="text" name="nama_vendor">Nama Vendor</x-input>
+  <x-input id="contact" type="text" name="contact">Contact</x-input>
+  <x-input id="bank" type="text" name="bank">Bank</x-input>
+  <x-input id="no_rekening" type="number" name="no_rekening">No Rekening</x-input>
+  <x-input id="account_name" type="text" name="account_name">Nama Akun</x-input>
+  <x-input id="validity_period" type="date" name="validity_period">Periode Validasi</x-input> 
+</x-modal>
 <!-- tutup modal create vendor -->
 
 
 <!-- modal info vendor -->
-<div class="modal fade p-1" id="info-modal" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-md"> 
-    <div class="modal-content">
-      <div class="modal-header d-flex align-items-center">
-        <h4 class="modal-title" id="myModalLabel">
-          Info Vendor 
-        </h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <x-loading-spinner id="loading-info"/>
-
-        <table class="table border" id="table-info">
-          <thead>
-            <tr>
-              <th>Nama Vendor</th>
-              <td id="name_vendor-info">-</td>
-            </tr>
-            <tr>
-              <th>Contact</th>
-              <td id="contact-info">-</td>
-            </tr>
-            <tr>
-              <th>Bank</th>
-              <td id="bank-info">-</td>
-            </tr>
-            <tr>
-              <th>No Rekening</th>
-              <td id="no_rekening-info">-</td>
-            </tr>
-            <tr>
-              <th>Nama AKun</th>
-              <td id="account_name-info">-</td>
-            </tr>
-            <tr>
-              <th>Periode Validasi</th>
-              <td id="validity_period-info">-</td>
-            </tr>
-            <tr>
-              <th>Waktu Dibuat</th>
-              <td id="createted-at-info">-</td>
-            </tr>
-          </thead>
-        </table>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="font-medium btn btn-light-success text-success waves-effect">
-          Save
-        </button>
-        <button type="button" class="font-medium btn btn-light-danger text-danger waves-effect" data-bs-dismiss="modal">
-          Close
-        </button>
-      </div>
-    </div>  
-  </div> 
-</div> 
+<x-modal id="info-modal" labelId="infoLabel" title="Info Vendor" formId="info-vendor" method="POST" :showSaveButton="false">
+  <x-loading-spinner id="loading-info"/>
+  <table class="table border" id="table-info">
+    <thead>
+     <tr><th>Nama Vendor</th><td id="name_vendor-info">-</td></tr>
+     <tr><th>Contact</th><td id="contact-info">-</td></tr>
+     <tr><th>Bank</th><td id="bank-info">-</td></tr>
+     <tr><th>No Rekening</th><td id="no_rekening-info">-</td></tr>
+     <tr><th>Nama AKun</th><td id="account_name-info">-</td></tr>
+     <tr><th>Periode Validasi</th><td id="validity_period-info">-</td></tr>
+     <tr><th>Waktu Dibuat</th><td id="created-at-info">-</td></tr>
+   </thead>
+ </table>
+</x-modal>
 <!-- tutup modal info vendor -->
 
 <!-- modal update vendor -->
-<div class="modal fade p-1" id="edit-modal" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true" style="display: none;">
-  <div class="modal-dialog modal-md">
-    <form id="edit-vendor" method="POST" data-id=''>
-      @csrf
-      @method('PUT')
-      <div class="modal-content">
-        <div class="modal-header d-flex align-items-center">
-          <h4 class="modal-title" id="myModalLabel">
-            Edit Vendor 
-          </h4>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-
-          <x-loading-spinner id="loading-modal-edit"/> 
-          <div id="form-edit">
-            <div class="form-group">
-              <label for="nama_vendor">Nama Vendor</label>
-              <input type="text" class="form-control" name="nama_vendor" id="name_vendor_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="contact">Contact</label>
-              <input type="text" class="form-control" name="contact" id="contact_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="bank">Bank</label>
-              <input type="text" class="form-control" name="bank" id="bank_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="no_rekening">No Rekening</label>
-              <input type="text" class="form-control" name="no_rekening" id="no_rekening_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="account_name">Nama Akun</label>
-              <input type="text" class="form-control" name="account_name" id="account_name_update" required autocomplete="off">
-            </div>
-            <div class="form-group">
-              <label for="validity_period">Periode Validasi</label>
-              <input type="text" class="form-control" name="validity_period" id="validity_period_update" required autocomplete="off">
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="font-medium btn btn-light-success text-success waves-effect">
-            Save
-          </button>
-          <button type="button" class="font-medium btn btn-light-danger text-danger waves-effect" data-bs-dismiss="modal">
-            Close
-          </button>
-        </div>
-      </div> 
-    </form>
-  </div> 
-</div> 
+<x-modal id="edit-modal" labelId="editLabel" title="Edit Vendor" formId="edit-vendor" method="PUT">
+  <x-loading-spinner id="loading-modal-edit"/>
+  <div id="form-edit">
+    <x-input id="nama_vendor_update" type="text" name="nama_vendor">Nama Vendor</x-input>
+    <x-input id="contact_update" type="text" name="contact">Contact</x-input>
+    <x-input id="bank_update" type="text" name="bank">Bank</x-input>
+    <x-input id="no_rekening_update" type="number" name="no_rekening">No Rekening</x-input>
+    <x-input id="account_name_update" type="text" name="account_name">Nama Akun</x-input>
+    <x-input id="validity_period_update" type="date" name="validity_period">Periode Validasi</x-input>
+  </div>
+</x-modal>
 <!-- tutup modal update vendor -->
 <x-loading-spinner id="loading-spinner"/>
 @endsection
+
+
 @section('js')
 <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{ asset('assets/js/crud/crud.js')}}"></script>
 <script>
-  $('#datatables').DataTable({
-    processing: true,
-    serverSide: true,
-    ajax: '{{ route('Vendor.tableVendor') }}',
-    columns: [
-      { data: 'no', name: 'no' },
-      { data: 'nama_vendor', name: 'nama_vendor' },
-      { data: 'contact', name: 'contact' },
-      { data: 'bank', name: 'bank' },
-      { data: 'validity_period', name: 'validity_period' },
-      { data: 'action', name: 'action', orderable: false, searchable: false }
-      ]
-  });
+  initDataTable('#datatables', '{{ route('Vendor.tableVendor') }}', 
+    [
+     { data: 'no', name: 'no' },
+     { data: 'nama_vendor', name: 'nama_vendor' },
+     { data: 'contact', name: 'contact' },
+     { data: 'bank', name: 'bank' },
+     { data: 'validity_period', name: 'validity_period' },
+     { data: 'action', name: 'action', orderable: false, searchable: false },
+     ]
+    );
 
   // modal info
   $(document).on('click', '.info-btn', function() {
     let id = $(this).data('id');
-    
+
     $('#table-info').addClass('d-none');
     $('#loading-info').removeClass('d-none');
 
@@ -259,13 +97,25 @@
       success: function(response) {
         let data = response;
 
+        if (data.created_at) {
+          const date = new Date(data.created_at);
+          const formattedDate = new Intl.DateTimeFormat('id-ID', {
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+          }).format(date);
+
+          $('#created-at-info').text(formattedDate);
+        }
+
         $('#name_vendor-info').text(data.nama_vendor);
         $('#contact-info').text(data.contact);
         $('#bank-info').text(data.bank);
         $('#validity_period-info').text(data.validity_period);
         $('#account_name-info').text(data.account_name);
         $('#no_rekening-info').text(data.no_rekening);
-        $('#createted-at-info').text(data.created_at);
 
         $('#loading-info').addClass('d-none');
         $('#table-info').removeClass('d-none');
@@ -294,9 +144,9 @@
       success: function(response) {
         $('#form-edit').removeClass('d-none');
         $('#loading-modal-edit').addClass('d-none');
-        
+
         let data = response;
-        $('#name_vendor_update').val(data.nama_vendor);
+        $('#nama_vendor_update').val(data.nama_vendor);
         $('#contact_update').val(data.contact);
         $('#bank_update').val(data.bank);
         $('#validity_period_update').val(data.validity_period);
@@ -313,152 +163,12 @@
     });
   });
 
-  // button submit create vendor
-  $('#create-vendor').submit(function(e) {
-    e.preventDefault();
-    let formData = new FormData(this);
-    $('#loading-spinner').removeClass('d-none');
+  setupFormSubmit('#create-vendor', '{{ route("vendor.store") }}', '#datatables', 'Vendor created successfully!', true, '#create-modal');
 
-    $.ajax({
-      url: "{{ route('vendor.store') }}",
-      type: 'POST',
-      data: formData,
-      contentType: false,
-      processData: false,
-      success: function(response) {
-        $('#loading-spinner').addClass('d-none');
+  setupFormSubmit('#edit-vendor', '{{ route("vendor.update", ":id") }}', '#datatables', 'Vendor updated successfully!',false, '#edit-modal');
 
-        $('#create-modal').modal('hide');
-        $('#datatables').DataTable().ajax.reload();
-        $('#create-vendor').trigger('reset');
+  setupDeleteButton('.delete-btn', '{{ route("vendor.destroy", ":id") }}', '#datatables');
 
-        Swal.fire({
-          title: 'Success!',
-          text: response.message,
-          icon: 'success',
-          confirmButtonText: 'OK'
-        });
-      },
-      error: function(xhr, status, error) {
-        $('#loading-spinner').addClass('d-none');
-        console.error("Error uploading data:", error);
-
-        if (xhr.status === 422) {
-          let errors = xhr.responseJSON.errors;
-          let errorMessage = '<ul>';
-
-          $.each(errors, function(field, messages) {
-            errorMessage += '<li>' + messages.join(', ') + '</li>';
-          });
-
-          errorMessage += '</ul>';
-
-          Swal.fire({
-            title: 'Validation Error!',
-            html: errorMessage,
-            icon: 'error',
-            confirmButtonText: 'OK'
-          });
-        } else {
-          Swal.fire({
-            title: 'Error!',
-            text: 'An unexpected error occurred. Please try again later.',
-            icon: 'error',
-            confirmButtonText: 'OK'
-          });
-        }
-      }
-    });
-  });
-
-  //button submit edit vendor
-  $('#edit-vendor').submit(function (e) {
-    e.preventDefault();
-
-    let formData = new FormData(this);
-    let vendorId = $(this).data('id'); 
-
-    $('#loading-overlay').removeClass('d-none');
-
-    $.ajax({
-      url: "{{ route('vendor.update', ':id') }}".replace(':id', vendorId),
-      type: 'POST',
-      data: formData,
-      contentType: false,
-      processData: false,
-      success: function (response) {
-        $('#loading-overlay').addClass('d-none');
-
-        $('#edit-modal').modal('hide');
-        $('#edit-vendor').trigger('reset');
-
-        $('#datatables').DataTable().ajax.reload();
-
-        Swal.fire({
-          title: 'Success!',
-          text: response.message,
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
-      },
-      error: function (xhr) {
-        $('#loading-overlay').addClass('d-none');
-
-        Swal.fire({
-          title: 'Error!',
-          text: xhr.responseJSON?.message || 'Something went wrong!',
-          icon: 'error',
-          confirmButtonText: 'OK',
-        });
-      },
-    });
-  });
-
-
-
-  // button delete 
-  $(document).on('click', '.delete-btn', function() {
-    let id = $(this).data('id');
-    let deleteUrl = '{{ route("vendor.destroy", ":id") }}'.replace(':id', id);
-
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "This action cannot be undone!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        $.ajax({
-          url: deleteUrl,
-          type: 'DELETE',
-          data: {
-            _token: '{{ csrf_token() }}'
-          },
-          success: function(response) {
-            $('#datatables').DataTable().ajax.reload();
-            Swal.fire({
-              title: 'Deleted!',
-              text: response.message,
-              icon: 'success',
-              confirmButtonText: 'OK'
-            });
-          },
-          error: function(xhr, status, error) {
-            console.error("Error deleting data:", error);
-            Swal.fire({
-              title: 'Error!',
-              text: 'There was an error deleting the data.',
-              icon: 'error',
-              confirmButtonText: 'OK'
-            });
-          }
-        });
-      }
-    });
-  });
 </script>
 
 @endsection

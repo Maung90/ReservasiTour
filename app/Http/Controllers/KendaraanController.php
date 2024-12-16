@@ -37,7 +37,8 @@ class KendaraanController extends Controller
             return $row->kapasitas;
         })
         ->addColumn('status', function ($row) {
-            return $row->status;
+            $status = $row->status == "available" ? " bg-success" : "bg-danger";
+            return '<span class="badge rounded-pill '.$status.'">'.$row->status.'</span>';
         })
         ->addColumn('action', function ($row) {
             return '
@@ -49,7 +50,7 @@ class KendaraanController extends Controller
             </button>
             ';
 
-        })
+        })->rawColumns(['action','status'])
         ->make(true);
 
         return $data;

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Bahasa; 
+use App\Models\GuideHasBahasa; 
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;  
@@ -9,6 +10,7 @@ use Illuminate\Support\Carbon;
 use Yajra\DataTables\DataTables;
 // use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class BahasaController extends Controller
 {
@@ -24,7 +26,7 @@ class BahasaController extends Controller
         ->addColumn('no', function ($row) {
             static $counter = 0;
             return ++$counter;
-        })
+    })
         ->addColumn('nama_bahasa', function ($row) {
             return $row->nama_bahasa;
         })
@@ -47,6 +49,12 @@ class BahasaController extends Controller
         return $data;
     }
 
+    public function getAllBahasa()
+    {
+        $bahasas = Bahasa::all();
+        return $bahasas;
+    }
+
     public function get($id)
     {
         $bahasa = Bahasa::find($id);
@@ -56,14 +64,23 @@ class BahasaController extends Controller
 
     public function destroy($id)
     {
-        $bahasa = Bahasa::find($id);
-        
-        if ($bahasa) {
-            $bahasa->delete();
-            return response()->json(['message' => 'Data deleted successfully.']);
-        } else {
-            return response()->json(['message' => 'Data not found.'], 404);
+        try{
+            $guidehasbahasa = GuideHasBahasa::where('bahasa_id',$id)->firstOrFail();
+
+            return response()->json(['message' => 'Data still connected with guide!'], 422);
+        }catch (\Exception $e) {
+
+            $bahasa = Bahasa::find($id);
+            
+            if ($bahasa) {
+
+                $bahasa->delete();
+                return response()->json(['message' => 'Data deleted successfully.']);
+            } else {
+                return response()->json(['message' => 'Data not found.'], 404);
+            }
         }
+        
     }
 
     public function store(Request $request)
@@ -72,7 +89,6 @@ class BahasaController extends Controller
             'nama_bahasa' => 'required|unique:bahasas|string|max:255',
             'harga_bahasa' => 'required|numeric',
         ]);
-
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Validation errors',
@@ -95,7 +111,7 @@ class BahasaController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'nama_bahasa' => 'required|unique:bahasas|string|max:255',
+            'nama_bahasa' => 'required|string|max:255',Rule::unique('bahasas')->ignore($id),
             'harga_bahasa' => 'required|numeric',
         ]);
 

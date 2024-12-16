@@ -17,4 +17,18 @@ class Tagihan extends Model
         'created_by',
         'updated_by',
     ];
+
+    public function reservasi()
+    {
+        return $this->belongsTo(Reservasi::class, 'reservasi_id');
+    }
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updator()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
+    }
 }

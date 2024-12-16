@@ -34,7 +34,8 @@ class SopirController extends Controller
             return $row->no_telp;
         })
         ->addColumn('status', function ($row) {
-            return $row->status;
+            $status = $row->status == "available" ? " bg-success" : "bg-danger";
+            return '<span class="badge rounded-pill '.$status.'">'.$row->status.'</span>';
         })
         ->addColumn('action', function ($row) {
             return '
@@ -46,7 +47,7 @@ class SopirController extends Controller
             </button>
             ';
 
-        })
+        })->rawColumns(['action','status'])
         ->make(true);
 
         return $data;

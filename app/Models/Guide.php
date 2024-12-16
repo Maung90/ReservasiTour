@@ -14,4 +14,8 @@ class Guide extends Model
         'no_telp',
         'status',
     ];
+    public function bahasa()
+    {
+        return $this->hasMany(GuideHasBahasa::class, 'guide_id', 'id');
+    }
 }
