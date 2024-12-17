@@ -7,6 +7,8 @@ use App\Http\Controllers\BahasaController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KendaraanController;
 use App\Http\Controllers\GuideController;
+use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\ProdukController;
 
 Route::get('/', function () {
     return view('home');
@@ -72,4 +74,24 @@ Route::controller(GuideController::class)->group(function () {
     Route::get('/guide/get/{id}', 'get')->name('guide.get'); //Read
     Route::put('/guide/{id}', 'update')->name('guide.update'); // Update
     Route::delete('/guide/{id}', 'destroy')->name('guide.destroy'); //Delete
+});
+
+Route::controller(ProgramController::class)->group(function () {
+    Route::get('/guide/table/program', 'tableProgram')->name('program.tableProgram');
+    Route::get('/program', 'program');
+
+    Route::post('/program', 'store')->name('program.store'); // Create
+    Route::get('/program/get/{id}', 'get')->name('program.get'); //Read
+    Route::put('/program/{id}', 'update')->name('program.update'); // Update
+    Route::delete('/program/{id}', 'destroy')->name('program.destroy'); //Delete
+});
+
+Route::controller(ProdukController::class)->group(function () {
+    Route::get('/guide/table/produk', 'tableProduk')->name('produk.tableProduk');
+    Route::get('/produk', 'produk');
+
+    Route::post('/produk', 'store')->name('produk.store'); // Create
+    Route::get('/produk/get/{id}', 'get')->name('produk.get'); //Read
+    Route::put('/produk/{id}', 'update')->name('produk.update'); // Update
+    Route::delete('/produk/{id}', 'destroy')->name('produk.destroy'); //Delete
 });
