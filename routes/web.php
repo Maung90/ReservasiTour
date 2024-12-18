@@ -11,10 +11,16 @@ use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\TagihanController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\AuthController;
 
 
 Route::get('/', function () {
     return view('home');
+});
+
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'login');
+    Route::post('/login', 'submit')->name('auth.login'); 
 });
 
 Route::controller(VendorController::class)->group(function () {
