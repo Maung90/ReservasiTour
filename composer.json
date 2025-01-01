@@ -6,8 +6,11 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "illuminate/view": "*",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
+        "livewire/livewire": "*",
+        "mews/captcha": "^3.4",
         "midtrans/midtrans-php": "^2.6",
         "yajra/laravel-datatables": "^11.0"
     },

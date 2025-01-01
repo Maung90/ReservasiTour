@@ -15,10 +15,18 @@ class AuthController extends Controller
 
     public function submit(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+            'captcha' => 'required|captcha',
+        ], [
+            'captcha.captcha' => 'Captcha tidak valid.',
+        ]);
+          $credentials = $request->validate([
             'username' => 'required',
             'password' => 'required',
         ]);
+
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();

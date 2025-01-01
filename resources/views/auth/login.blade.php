@@ -53,6 +53,16 @@
                                         <span class="input-group-text cursor-pointer" id="mata"><i class="ti ti-eye-off" id="matanya"></i></span>
                                     </div>
                                 </div>
+                                <div class="mb-3">
+                                    {{-- <label for="captcha">Captcha:</label> --}}
+                                    <div class="d-flex justify-content-between">
+                                        <img src="{{ captcha_src() }}" alt="captcha" id="captcha-image" class="w-100 h-25">
+                                        <button class="btn" type="button" onclick="refreshCaptcha()" >
+                                            <span class="ti ti-refresh fs-4"></span>
+                                        </button>
+                                    </div>
+                                    <input class="form-control" type="text" name="captcha" id="captcha" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required>
+                                </div>
                                 <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2" id="submit-btn">
                                     <span class="spinner-border spinner-border-sm d-none" id="loading-spinner" role="status" aria-hidden="true"></span>
                                     <span class="mx-2">Sign In</span>
@@ -85,6 +95,11 @@
 </script>
 @endif
 <script>
+    function refreshCaptcha() {
+        const captchaImage = document.getElementById('captcha-image');
+        captchaImage.src = "{{ captcha_src() }}&" + Math.random();
+    }
+
     $(document).ready(function(){
 
         $('#form-login').submit(function (e) {
@@ -99,8 +114,10 @@
                     $('meta[name="csrf-token"]').attr('content', response.csrf_token);
                     $('#loading-spinner').addClass('d-none');
                     window.location.href = 'dashboard';
+                    refreshCaptcha();
                 },
                 error: function (xhr, status, error) {
+                    refreshCaptcha();
                     $('#loading-spinner').addClass('d-none');
                     showToastr('error',xhr.responseJSON.message,'Warning');
                 }
