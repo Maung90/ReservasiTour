@@ -74,6 +74,16 @@
 <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
 <script src="{{ asset('assets/libs/toastr/toastr.js') }}"></script>
 <script src="{{ asset('assets/js/crud/crud.js') }}"></script>
+@if (session('error'))
+<script>
+    showToastr('error','{{ session('error') }}','Error!');
+</script>
+@endif
+@if (session('logout'))
+<script>
+    showToastr('success','{{ session('logout') }}','Success!');
+</script>
+@endif
 <script>
     $(document).ready(function(){
 
@@ -88,7 +98,7 @@
                     showToastr('success',response.message,'Success');
                     $('meta[name="csrf-token"]').attr('content', response.csrf_token);
                     $('#loading-spinner').addClass('d-none');
-                    window.location.href = '/';
+                    window.location.href = 'dashboard';
                 },
                 error: function (xhr, status, error) {
                     $('#loading-spinner').addClass('d-none');

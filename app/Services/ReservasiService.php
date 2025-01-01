@@ -54,8 +54,6 @@ class ReservasiService
             'sopir_id' => $request->sopir_id,
             'remarks' => $request->remarks,
             'bahasa_id' => $request->bahasa_id ?? '1',
-            'created_by' => '1',
-            'updated_by' => '1',
         ]);
     }
 
@@ -125,7 +123,6 @@ class ReservasiService
             'sopir_id' => $request->sopir_id,
             'remarks' => $request->remarks,
             'bahasa_id' => $request->bahasa_id,
-            'updated_by' => '1',
         ]);
     }
 
@@ -168,8 +165,6 @@ class ReservasiService
                 'total' => $total,
                 'status' => 'pending',
                 'deskripsi' => '-',
-                'created_by' => '1',
-                'updated_by' => '1',
             ]
         );
     }

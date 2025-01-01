@@ -12,10 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('tagihans', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary(); 
             $table->double('total');
             $table->enum('status',['pending','paid']);
-            $table->string('deskripsi');
             $table->unsignedBigInteger('reservasi_id');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');

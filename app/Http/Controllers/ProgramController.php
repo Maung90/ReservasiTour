@@ -20,7 +20,7 @@ class ProgramController extends Controller
     }
     public function tableProgram() 
     {
-        $programs = Program::all();
+        $programs = Program::orderBy('id', 'desc')->get();
 
         $data = DataTables::of($programs)
         ->addColumn('no', function ($row) {
@@ -37,10 +37,10 @@ class ProgramController extends Controller
             return $row->durasi;
         })
         ->addColumn('created_by', function ($row) {
-            return $row->created_by;
+            return $row->creator->nama;
         })
         ->addColumn('updated_by', function ($row) {
-            return $row->updated_by;
+            return $row->updator->nama;
         })
         ->addColumn('action', function ($row) {
             return '
@@ -97,8 +97,6 @@ class ProgramController extends Controller
                 'nama_program' => $request->nama_program,
                 'deskripsi' => $request->deskripsi,
                 'durasi' => $request->durasi,
-                'created_by' => "1",
-                'updated_by' => "1",
             ]);
 
             return response()->json(['message' => 'Program created successfully!', 'data' => $program], 201);
@@ -129,8 +127,6 @@ class ProgramController extends Controller
                 'nama_program' => $request->nama_program,
                 'deskripsi' => $request->deskripsi,
                 'durasi' => $request->durasi,
-                'created_by' => "1",
-                'updated_by' => "1",
             ]);
 
             return response()->json(['message' => 'Program updated successfully!', 'data' => $program], 200);

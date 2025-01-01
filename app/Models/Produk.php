@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\TracksUser;
 
 class Produk extends Model
 {
     /** @use HasFactory<\Database\Factories\ProdukFactory> */
-    use HasFactory;
+    use HasFactory, TracksUser;
     protected $fillable = [
         'nama_produk',
         'harga',
@@ -16,8 +17,6 @@ class Produk extends Model
         'deskripsi',
         'tipe_produk',
         'vendor_id',
-        'created_by',
-        'updated_by',
     ];
     public function vendor()
     {

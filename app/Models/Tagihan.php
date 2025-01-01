@@ -4,18 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use App\Traits\TracksUser;
 
 class Tagihan extends Model
 {
     /** @use HasFactory<\Database\Factories\TagihanFactory> */
-    use HasFactory;
+    use HasFactory,HasUuids,TracksUser;
+    protected $keyType = 'string'; // UUID adalah string
+    public $incrementing = false; // Non-incremental ID
+    
     protected $fillable = [
         'total',
         'status',
-        'deskripsi',
         'reservasi_id',
-        'created_by',
-        'updated_by',
     ];
 
     public function reservasi()

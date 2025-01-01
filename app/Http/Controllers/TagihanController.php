@@ -28,9 +28,6 @@ class TagihanController extends Controller
         ->addColumn('tour_code', function ($row) {
             return $row->reservasi->tour_code;
         })
-        // ->addColumn('deskripsi', function ($row) {
-        //     return $row->deskripsi;
-        // })
         ->addColumn('total', function ($row) {
             return $row->total;
         })

@@ -21,7 +21,6 @@ class TagihanFactory extends Factory
         return [ 
             'total'  => $this->faker->numberBetween(50000, 100000),
             'status' => 'paid',
-            'deskripsi' => $this->faker->paragraph(),
             'reservasi_id' => Reservasi::inRandomOrder()->value('id'),
             'created_by' => User::inRandomOrder()->value('id'),
             'updated_by' => User::inRandomOrder()->value('id'),

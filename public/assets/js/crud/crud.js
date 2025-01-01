@@ -1,15 +1,60 @@
+function showToastr(type, message, title = '') {
+  toastr.options = {
+    "closeButton": true,
+    "debug": false,
+    "newestOnTop": true,
+    "progressBar": true,
+    "positionClass": "toast-top-right", 
+    "preventDuplicates": true,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000", 
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  };
+
+  switch (type) {
+  case 'success':
+    toastr.success(message, title);
+    break;
+  case 'error':
+    toastr.error(message, title);
+    break;
+  case 'info':
+    toastr.info(message, title);
+    break;
+  case 'warning':
+    toastr.warning(message, title);
+    break;
+  default:
+    console.error('Invalid toastr type:', type);
+  }
+}
 function initDataTable(selector, ajaxUrl, columns) {
   $(selector).DataTable({
     processing: true,
     serverSide: true,
     ajax: ajaxUrl,
     language: {
-      processing: '<div class="spinner-grow  text-primary" style="width: 3rem; height: 3rem;" role="status"><span class="visually-hidden">Loading...</span> </div>',
-      loadingRecords: '<div class="spinner-grow  text-primary" style="width: 3rem; height: 3rem;" role="status"><span class="visually-hidden">Loading...</span> </div>.'
+      processing: '<div class="spinner-overlay"><div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status"><span class="visually-hidden">Loading...</span></div></div>',
+      loadingRecords: '<div class="spinner-overlay"><div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status"><span class="visually-hidden">Loading...</span></div></div>',
     },
     scrollX: false,
     columns: columns,
   });
+
+  $(selector).on('processing.dt', function (e, settings, processing) {
+    if (processing) {
+      $('#loading-spinner').fadeIn();
+    } else {
+      $('#loading-spinner').fadeOut();
+    }
+  });
+
 }
 
 function setupFormSubmit(formSelector, ajaxUrlTemplate, tableSelector, successMessage, isCreate = false, modalSelector) {
@@ -18,7 +63,12 @@ function setupFormSubmit(formSelector, ajaxUrlTemplate, tableSelector, successMe
     let formData = new FormData(this);
     let id = $(this).data('id');
     let submitUrl = isCreate ? ajaxUrlTemplate : ajaxUrlTemplate.replace(':id', id);
-    $('#loading-spinner').removeClass('d-none');
+    $('#btn').addClass('disabled');
+    $('#btn-loading-spinner').removeClass('d-none');
+
+    $(formSelector).find('.error-message').remove(); 
+    $(formSelector).find('.is-invalid').removeClass('is-invalid');
+
     $.ajax({
       url: submitUrl,
       type: 'POST',
@@ -26,37 +76,30 @@ function setupFormSubmit(formSelector, ajaxUrlTemplate, tableSelector, successMe
       contentType: false,
       processData: false,
       success: function (response) {
-        $('#loading-spinner').addClass('d-none');
+        $('#btn').removeClass('disabled');
+        $('#btn-loading-spinner').addClass('d-none');
         $(formSelector).trigger('reset');
         $(tableSelector).DataTable().ajax.reload();
         $(modalSelector).modal('hide');
-
-        Swal.fire({
-          title: 'Success!',
-          text: successMessage,
-          icon: 'success',
-          confirmButtonText: 'OK',
-        });
+        showToastr('success', successMessage, 'Success!');
       },
       error: function (xhr, status, error) {
-        $('#loading-spinner').addClass('d-none');
+        $('#btn').removeClass('disabled');
+        $('#btn-loading-spinner').addClass('d-none');
         console.error("Error uploading data:", error);
 
         if (xhr.status === 422) {
           let errors = xhr.responseJSON.errors;
-          let errorMessage = '<ul>';
 
-          $.each(errors, function(field, messages) {
-            errorMessage += '<li>' + messages.join(', ') + '</li>';
-          });
+          $.each(errors, function (field, messages) {
+            let inputField = $(formSelector).find(`[name="${field}"]`);
+            inputField.addClass('is-invalid');
 
-          errorMessage += '</ul>';
+            let errorMessage = $('<span>')
+            .addClass('error-message text-danger')
+            .text(messages.join(', '));
 
-          Swal.fire({
-            title: 'Validation Error!',
-            html: errorMessage,
-            icon: 'error',
-            confirmButtonText: 'OK'
+            inputField.after(errorMessage);
           });
         } else {
           Swal.fire({
@@ -70,6 +113,7 @@ function setupFormSubmit(formSelector, ajaxUrlTemplate, tableSelector, successMe
     });
   });
 }
+
 
 function setupDeleteButton(buttonSelector, ajaxUrlTemplate, tableSelector) {
   $(document).on('click', buttonSelector, function () {
@@ -92,12 +136,13 @@ function setupDeleteButton(buttonSelector, ajaxUrlTemplate, tableSelector) {
           data: { _token: $('meta[name="csrf-token"]').attr('content') },
           success: function (response) {
             $(tableSelector).DataTable().ajax.reload();
-            Swal.fire({
-              title: 'Deleted!',
-              text: response.message,
-              icon: 'success',
-              confirmButtonText: 'OK',
-            });
+            showToastr('success',response.message,'Deleted!');
+            // Swal.fire({
+            //   title: 'Deleted!',
+            //   text: response.message,
+            //   icon: 'success',
+            //   confirmButtonText: 'OK',
+            // });
           },
           error: function (xhr, status, error) { 
             if (xhr.status === 422) {

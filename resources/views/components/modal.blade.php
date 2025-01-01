@@ -17,7 +17,8 @@
         </div>
         <div class="modal-footer">
           @if($showSaveButton ?? true)
-          <button type="submit" class="font-medium btn btn-light-success text-success waves-effect">
+          <button type="submit" class="font-medium btn btn-light-success text-success waves-effect" id="btn">
+            <span class="spinner-border spinner-border-sm d-none" id="btn-loading-spinner" role="status" aria-hidden="true"></span>
             {{ $saveButtonText ?? 'Save' }}
           </button>
           @endif

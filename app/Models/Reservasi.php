@@ -4,11 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\TracksUser;
 
 class Reservasi extends Model
 {
     /** @use HasFactory<\Database\Factories\ReservasiFactory> */
-    use HasFactory;
+    use TracksUser, HasFactory;
     protected $fillable = [
         'tour_code',
         'tour_date',
@@ -24,8 +25,6 @@ class Reservasi extends Model
         'transport_id',
         'sopir_id',
         'bahasa_id',
-        'created_by',
-        'updated_by',
     ];
       public static function generateTourCode()
     {

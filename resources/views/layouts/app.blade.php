@@ -162,72 +162,81 @@
 													<div class="d-flex align-items-center py-9 mx-7 border-bottom">
 														<img src="{{ asset('assets/images/profile/user-1.jpg') }}" class="rounded-circle" width="80" height="80" alt="" />
 														<div class="ms-3">
-															<!-- Menampilkan nama user dari database -->
-															<h5 class="mb-1 fs-3">agse</h5>
-															<!-- Menampilkan role user dari relasi dengan tabel roles -->
-															<span class="mb-1 d-block text-dark">adn</span>
-															<!-- Menampilkan email user -->
-															<p class="gap-2 mb-0 d-flex text-dark align-items-center">
-																<i class="ti ti-mail fs-4"></i> sss@g
-															</p>
+															<h5 class="mb-1 fs-3">{{ session('user.name') }}</h5>
+															<span class="mb-1 d-block text-dark">
+																{{ 
+																	session('user.role') == 1 ? 'admin' : 
+																	(session('user.role') == 2 ? 'production' : 
+																		(session('user.role') == 3 ? 'operation' : 
+																			(session('user.role') == 4 ? 'accounting' : 'agent')))
+																		}}
+
+																	</span>
+																	<!-- Menampilkan email user -->
+																	<p class="gap-2 mb-0 d-flex text-dark align-items-center">
+																		<i class="ti ti-mail fs-4"></i> {{ session('user.email') }}
+																	</p>
+																</div>
+															</div>
+															<div class="message-body">
+																<a href="{{ url('/profile') }}" class="py-8 mt-8 px-7 d-flex align-items-center">
+																	<span class="p-6 d-flex align-items-center justify-content-center bg-light rounded-1">
+																		<img src="{{ asset('assets/images/svgs/icon-account.svg') }}" alt="" width="24" height="24">
+																	</span>
+																	<div class="w-75 d-inline-block v-middle ps-3">
+																		<h6 class="mb-1 bg-hover-primary fw-semibold">My Profile</h6>
+																		<span class="d-block text-dark">Account Settings</span>
+																	</div>
+																</a>
+																<a href="{{ url('/email') }}" class="py-8 px-7 d-flex align-items-center">
+																	<span class="p-6 d-flex align-items-center justify-content-center bg-light rounded-1">
+																		<img src="{{ asset('assets/images/svgs/icon-inbox.svg') }}" alt="" width="24" height="24">
+																	</span>
+																	<div class="w-75 d-inline-block v-middle ps-3">
+																		<h6 class="mb-1 bg-hover-primary fw-semibold">My Inbox</h6>
+																		<span class="d-block text-dark">Messages & Emails</span>
+																	</div>
+																</a>
+															</div>
+															<div class="py-4 pt-8 d-grid px-7"> 
+																<form action="{{ route('logout') }}" method="POST" style="display: inline;">
+																	@csrf
+																	<button type="submit" class="btn btn-outline-primary">Logout</button>
+																</form>
+															</div>
 														</div>
 													</div>
-													<div class="message-body">
-														<a href="{{ url('/profile') }}" class="py-8 mt-8 px-7 d-flex align-items-center">
-															<span class="p-6 d-flex align-items-center justify-content-center bg-light rounded-1">
-																<img src="{{ asset('assets/images/svgs/icon-account.svg') }}" alt="" width="24" height="24">
-															</span>
-															<div class="w-75 d-inline-block v-middle ps-3">
-																<h6 class="mb-1 bg-hover-primary fw-semibold">My Profile</h6>
-																<span class="d-block text-dark">Account Settings</span>
-															</div>
-														</a>
-														<a href="{{ url('/email') }}" class="py-8 px-7 d-flex align-items-center">
-															<span class="p-6 d-flex align-items-center justify-content-center bg-light rounded-1">
-																<img src="{{ asset('assets/images/svgs/icon-inbox.svg') }}" alt="" width="24" height="24">
-															</span>
-															<div class="w-75 d-inline-block v-middle ps-3">
-																<h6 class="mb-1 bg-hover-primary fw-semibold">My Inbox</h6>
-																<span class="d-block text-dark">Messages & Emails</span>
-															</div>
-														</a>
-													</div>
-													<div class="py-4 pt-8 d-grid px-7"> 
-														<button type="button" class="btn btn-outline-primary">Logout</button>
-													</div>
-												</div>
-											</div>
 
-										</li>
-									</ul>
-								</div>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</nav>
+							</header>
+							<!--  Header End -->
+							<div class="container-fluid">
+								@yield('content')
 							</div>
-						</nav>
-					</header>
-					<!--  Header End -->
-					<div class="container-fluid">
-						@yield('content')
+						</div>
+						<div class="dark-transparent sidebartoggler"></div>
+						<div class="dark-transparent sidebartoggler"></div>
 					</div>
-				</div>
-				<div class="dark-transparent sidebartoggler"></div>
-				<div class="dark-transparent sidebartoggler"></div>
-			</div>
 
-			<!--  Import Js Files -->
-			<script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
-			<script src="{{ asset('assets/libs/simplebar/dist/simplebar.min.js') }}"></script>
-			<script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-			<!--  core files -->
-			<script src="{{ asset('assets/js/app.min.js') }}"></script>
-			<script src="{{ asset('assets/js/app.init.js') }}"></script>
-			<script src="{{ asset('assets/js/app-style-switcher.js') }}"></script>
-			<script src="{{ asset('assets/js/sidebarmenu.js') }}"></script>
-			<script src="{{ asset('assets/js/custom.js') }}"></script>
-			<script src="{{ asset('assets/libs/prismjs/prism.js') }}"></script> 
-			<script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
-			<!--  current page js files -->
-			<script src="{{ asset('assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
-			<script src="{{ asset('assets/libs/toastr/toastr.js') }}"></script>
-			@yield('js','')
-		</body>
-		</html>
+					<!--  Import Js Files -->
+					<script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
+					<script src="{{ asset('assets/libs/simplebar/dist/simplebar.min.js') }}"></script>
+					<script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+					<!--  core files -->
+					<script src="{{ asset('assets/js/app.min.js') }}"></script>
+					<script src="{{ asset('assets/js/app.init.js') }}"></script>
+					<script src="{{ asset('assets/js/app-style-switcher.js') }}"></script>
+					<script src="{{ asset('assets/js/sidebarmenu.js') }}"></script>
+					<script src="{{ asset('assets/js/custom.js') }}"></script>
+					<script src="{{ asset('assets/libs/prismjs/prism.js') }}"></script> 
+					<script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+					<!--  current page js files -->
+					<script src="{{ asset('assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
+					<script src="{{ asset('assets/libs/toastr/toastr.js') }}"></script>
+					@yield('js','')
+				</body>
+				</html>

@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
@@ -26,10 +24,11 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             $user = Auth::user();
-
-            session([
-                'user_id' => $user->id,
+            Session::put('user', [
+                'id' => $user->id,
+                'name' => $user->nama,
                 'username' => $user->username,
+                'email' => $user->email,
                 'role' => $user->role_id,
             ]);
             
@@ -47,4 +46,11 @@ class AuthController extends Controller
         ], 422);
     }
 
+    public function logout()
+    {
+        Session::flush();
+        Auth::logout();
+
+        return redirect('/login')->with('logout', 'Anda telah logout.');
+    }
 }

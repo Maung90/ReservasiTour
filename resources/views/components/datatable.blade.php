@@ -1,4 +1,4 @@
-<div class="card-body">
+<div class="card-body" style="position: relative;">
   <div class="tab-content" id="pills-tabContent">
     <div class="tab-pane fade show active" id="pills-account" role="tabpanel" aria-labelledby="pills-account-tab" tabindex="0">
       <div class="card">

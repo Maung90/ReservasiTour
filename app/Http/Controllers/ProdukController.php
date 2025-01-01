@@ -109,8 +109,6 @@ class ProdukController extends Controller
                 'vendor_id' => $request->vendor_id,
                 'tipe_produk' => $request->tipe_produk,
                 'deskripsi' => $request->deskripsi,
-                'created_by' => "1",
-                'updated_by' => "1",
             ]);
 
             return response()->json(['message' => 'Produk created successfully!', 'data' => $produk], 201);
@@ -147,8 +145,6 @@ class ProdukController extends Controller
                 'vendor_id' => $request->vendor_id,
                 'tipe_produk' => $request->tipe_produk,
                 'deskripsi' => $request->deskripsi,
-                'created_by' => "1",
-                'updated_by' => "1",
             ]);
 
             return response()->json(['message' => 'Produk updated successfully!', 'data' => $produk], 200);
