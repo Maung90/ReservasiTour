@@ -18,8 +18,7 @@
 	<!-- Owl Carousel  -->
 	<link rel="stylesheet" href="{{ asset('assets/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}">
-	<link rel="stylesheet" href="{{ asset('assets/libs/toastr/toastr.css') }}">
-
+	{{-- <link rel="stylesheet" href="{{ asset('assets/libs/toastr/toastr.css') }}"> --}}
 	<!-- Core Css -->
 	<link  id="themeColors"  rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
 	@yield('css')
@@ -61,30 +60,116 @@
 						<!-- =================== -->
 						<!-- Dashboard -->
 						<!-- =================== -->
-						<x-sidebar-item icon="ti ti-smart-home" url="/">
+						<x-sidebar-item icon="ti ti-smart-home" url="dashboard">
 							Dashboard
 						</x-sidebar-item>
 						<!-- =================== -->
-						<!-- Reservasi -->
+						<!-- MENU AGENT -->
 						<!-- =================== --> 
-						<x-sidebar-item icon="ti ti-color-swatch" url="produk">
-							Produk
-						</x-sidebar-item>
-						<x-sidebar-item icon="ti ti-table-options" url="program">
-							Program
-						</x-sidebar-item>
+						@if(	session('user.role') == 5) : 
+
+						<li class="nav-small-cap mt-0">
+							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+							<span class="hide-menu">Reservasi</span>
+						</li>
 						<x-sidebar-item icon="ti ti ti-shopping-cart" url="reservasi-paket">
 							Paket Reservasi
 						</x-sidebar-item>
 						<x-sidebar-item icon="ti ti ti-shopping-cart-plus" url="reservasi-custom">
 							Custom Reservasi
 						</x-sidebar-item>
+
+						<li class="nav-small-cap">
+							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+							<span class="hide-menu">TAGIHAN</span>
+						</li>
 						<x-sidebar-item icon="ti ti ti-file-dollar" url="tagihan">
 							Tagihan
 						</x-sidebar-item>
+						@endif
+
+
 						<!-- =================== -->
-						<!-- Data Management -->
+						<!-- MENU ACCOUNTING -->
+						<!-- =================== --> 
+						@if(	session('user.role') == 4) : 
+						<li class="nav-small-cap">
+							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+							<span class="hide-menu">TAGIHAN</span>
+						</li>
+						<x-sidebar-item icon="ti ti ti-file-dollar" url="tagihan">
+							Tagihan
+						</x-sidebar-item>
+						@endif
+
 						<!-- =================== -->
+						<!-- MENU OPERATION -->
+						<!-- =================== --> 
+						@if(	session('user.role') == 3) :
+						<li class="nav-small-cap">
+							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+							<span class="hide-menu">Reservasi</span>
+						</li>
+						<x-sidebar-item icon="ti ti ti-shopping-cart" url="reservasi">
+							Reservasi
+						</x-sidebar-item>
+
+						<li class="nav-small-cap">
+							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+							<span class="hide-menu">TAGIHAN</span>
+						</li>
+						<x-sidebar-item icon="ti ti ti-file-dollar" url="tagihan">
+							Tagihan
+						</x-sidebar-item>
+
+						<li class="nav-small-cap">
+							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+							<span class="hide-menu">Data Management</span>
+						</li>
+						<x-sidebar-item icon="ti ti-color-swatch" url="produk">
+							Produk
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti-table-options" url="program">
+							Program
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti-language" url="bahasa">
+							Bahasa
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti-bus" url="sopir">
+							Sopir
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti-flag" url="guide">
+							Guide
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti-car" url="kendaraan">
+							Kendaraan
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti-affiliate" url="vendor">
+							Vendor
+						</x-sidebar-item>
+						@endif
+
+						<!-- =================== -->
+						<!-- MENU PRODUCTION -->
+						<!-- =================== --> 
+						@if(	session('user.role') == 2) : 
+
+						<li class="nav-small-cap mt-0">
+							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+							<span class="hide-menu">PRODUK & PROGRAM</span>
+						</li>
+						<x-sidebar-item icon="ti ti-color-swatch" url="produk">
+							Produk
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti-table-options" url="program">
+							Program
+						</x-sidebar-item>
+						@endif
+
+						<!-- =================== -->
+						<!-- MENU MASTER / ADMIN -->
+						<!-- =================== -->
+						@if(	session('user.role') == 1) : 
 						<li class="nav-small-cap">
 							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
 							<span class="hide-menu">Data Management</span>
@@ -92,8 +177,11 @@
 						<x-sidebar-item icon="ti ti ti-shopping-cart" url="reservasi">
 							Reservasi
 						</x-sidebar-item>
-						<x-sidebar-item icon="ti ti-package" url="paket">
-							Paket
+						<x-sidebar-item icon="ti ti-color-swatch" url="produk">
+							Produk
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti-table-options" url="program">
+							Program
 						</x-sidebar-item>
 						<x-sidebar-item icon="ti ti-users" url="user">
 							User
@@ -113,6 +201,7 @@
 						<x-sidebar-item icon="ti ti-affiliate" url="vendor">
 							Vendor
 						</x-sidebar-item>
+						@endif
 						<!-- End Sidebar navigation -->
 					</div>
 					<!-- End Sidebar scroll-->
@@ -236,7 +325,8 @@
 					<script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
 					<!--  current page js files -->
 					<script src="{{ asset('assets/libs/owl.carousel/dist/owl.carousel.min.js') }}"></script>
-					<script src="{{ asset('assets/libs/toastr/toastr.js') }}"></script>
+					{{-- <script src="{{ asset('assets/libs/toastr/toastr.js') }}"></script> --}}
+					<script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
 					@yield('js','')
 				</body>
 				</html>

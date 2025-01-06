@@ -7,7 +7,11 @@ use App\Models\ReservasiActivities;
 use App\Models\Flight;
 use App\Models\Tagihan;
 use App\Models\Bahasa;
+use App\Models\Guide;
+use App\Models\Kendaraan;
+use App\Models\Sopir;
 use App\Models\DetailProgram;
+use Illuminate\Support\Facades\DB;
 
 class ReservasiService
 {
@@ -104,7 +108,7 @@ class ReservasiService
 
         $total = (doubleval($request->pax) * doubleval($hargaProduk)) + doubleval($hargaBahasa);
 
-       return $total;
+        return $total;
     }
 
     public function updateReservasi($reservasi, $request)
@@ -167,6 +171,84 @@ class ReservasiService
                 'deskripsi' => '-',
             ]
         );
+    }
+
+    public function updateGuideStatusOnReservasi($reservasiId, $newGuideId)
+    {
+        DB::transaction(function () use ($reservasiId, $newGuideId) {
+            $reservasi = Reservasi::find($reservasiId);
+
+            if (!$reservasi) {
+                throw new \Exception("Reservasi dengan ID $reservasiId tidak ditemukan.");
+            }
+
+            // Ambil guide_id lama dari reservasi
+            $oldGuideId = $reservasi->guide_id;
+
+            // Jika ada guide_id lama dan berbeda dengan guide_id baru
+            if ($oldGuideId && $oldGuideId != $newGuideId) {
+                Guide::where('id', $oldGuideId)->update(['status' => 'available']);
+            }
+
+            // Ubah status guide baru menjadi 'unavailable'
+            if ($newGuideId) {
+                Guide::where('id', $newGuideId)->update(['status' => 'unavailable']);
+            }
+
+            $reservasi->update(['guide_id' => $newGuideId]);
+        });
+    }
+
+    public function updateSopirStatusOnReservasi($reservasiId, $newSopirId)
+    {
+        DB::transaction(function () use ($reservasiId, $newSopirId) {
+            $reservasi = Reservasi::find($reservasiId);
+
+            if (!$reservasi) {
+                throw new \Exception("Reservasi dengan ID $reservasiId tidak ditemukan.");
+            }
+
+            // Ambil sopir_id lama dari reservasi
+            $oldSopirId = $reservasi->sopir_id;
+
+            // Jika ada sopir_id lama dan berbeda dengan sopir_id baru
+            if ($oldSopirId && $oldSopirId != $newSopirId) {
+                Sopir::where('id', $oldSopirId)->update(['status' => 'available']);
+            }
+
+            // Ubah status Sopir baru menjadi 'unavailable'
+            if ($newSopirId) {
+                Sopir::where('id', $newSopirId)->update(['status' => 'unavailable']);
+            }
+
+            $reservasi->update(['sopir_id' => $newSopirId]);
+        });
+    }
+
+    public function updateKendaraanStatusOnReservasi($reservasiId, $newKendaraanId)
+    {
+        DB::transaction(function () use ($reservasiId, $newKendaraanId) {
+            $reservasi = Reservasi::find($reservasiId);
+
+            if (!$reservasi) {
+                throw new \Exception("Reservasi dengan ID $reservasiId tidak ditemukan.");
+            }
+
+            // Ambil transport_id lama dari reservasi
+            $oldKendaraanId = $reservasi->transport_id;
+
+            // Jika ada transport_id lama dan berbeda dengan transport_id baru
+            if ($oldKendaraanId && $oldKendaraanId != $newKendaraanId) {
+                Kendaraan::where('id', $oldKendaraanId)->update(['status' => 'available']);
+            }
+
+            // Ubah status Kendaraan baru menjadi 'unavailable'
+            if ($newKendaraanId) {
+                Kendaraan::where('id', $newKendaraanId)->update(['status' => 'unavailable']);
+            }
+
+            $reservasi->update(['transport_id' => $newKendaraanId]);
+        });
     }
 
 

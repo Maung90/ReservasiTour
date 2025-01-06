@@ -10,6 +10,7 @@ class Produk extends Model
 {
     /** @use HasFactory<\Database\Factories\ProdukFactory> */
     use HasFactory, TracksUser;
+    // use HasFactory;
     protected $fillable = [
         'nama_produk',
         'harga',
@@ -17,6 +18,8 @@ class Produk extends Model
         'deskripsi',
         'tipe_produk',
         'vendor_id',
+        // 'created_by',
+        // 'updated_by',
     ];
     public function vendor()
     {

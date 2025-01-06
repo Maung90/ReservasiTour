@@ -18,7 +18,9 @@
       <th>No Kendaraan</th>
       <th>kapasitas</th>
       <th>Status</th>
+      @if(auth()->user()->role_id != 3 ):
       <th>Aksi</th>
+      @endif
     </tr>
   </thead>
 </x-datatable> 
@@ -66,6 +68,8 @@
 <script>
 
   $(document).ready(function () {
+
+    var userRoleId = {{ auth()->user()->role_id }};
     initDataTable('#datatables', '{{ route('kendaraan.tableKendaraan') }}', 
       [
         { data: 'no', name: 'no' },
@@ -73,7 +77,7 @@
         { data: 'nomor_kendaraan', name: 'nomor_kendaraan' },
         { data: 'kapasitas', name: 'kapasitas' },
         { data: 'status', name: 'status' },
-        { data: 'action', name: 'action', orderable: false, searchable: false },
+        { data: 'action', name: 'action', orderable: false, searchable: false,  visible: userRoleId !== 3 },
         ]
       );
     

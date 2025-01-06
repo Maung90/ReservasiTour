@@ -17,7 +17,9 @@
       <th>No</th>
       <th>Nama Bahasa</th>
       <th>Harga Bahasa</th>
+      @if(auth()->user()->role_id != 3 ):
       <th>Aksi</th>
+      @endif
     </tr>
   </thead>
 </x-datatable>
@@ -47,58 +49,60 @@
 <script>
 
   $(document).ready(function () {
-   initDataTable('#datatables', '{{ route('bahasa.tableBahasa') }}', 
-    [
-     {data: 'no', name: 'no' },
-     { data: 'nama_bahasa', name: 'nama_bahasa' },
-     { 
-      data: 'harga_bahasa', 
-      name: 'harga_bahasa' ,  
-      render: function(data, type, row) {
-        return `Rp. ${parseInt(data).toLocaleString('id-ID')}`;
-      }
-    }, 
-    { data: 'action', name: 'action', orderable: false, searchable: false },
-    ]
-    );
+    var userRoleId = {{ auth()->user()->role_id }};
+
+    initDataTable('#datatables', '{{ route('bahasa.tableBahasa') }}', 
+      [
+       {data: 'no', name: 'no' },
+       { data: 'nama_bahasa', name: 'nama_bahasa' },
+       { 
+        data: 'harga_bahasa', 
+        name: 'harga_bahasa' ,  
+        render: function(data, type, row) {
+          return `Rp. ${parseInt(data).toLocaleString('id-ID')}`;
+        }
+      }, 
+      { data: 'action', name: 'action', orderable: false, searchable: false,  visible: userRoleId !== 3},
+      ]
+      );
 
   // modal edit 
-   $(document).on('click', '.edit-btn', function() {
-    let id = $(this).data('id');
-    $('#edit-bahasa').data('id', id);
+    $(document).on('click', '.edit-btn', function() {
+      let id = $(this).data('id');
+      $('#edit-bahasa').data('id', id);
 
-    $('#form-edit').addClass('d-none');
-    $('#loading-modal-edit').removeClass('d-none');
+      $('#form-edit').addClass('d-none');
+      $('#loading-modal-edit').removeClass('d-none');
 
-    $.ajax({
-      url: '{{ route("bahasa.get", ":id") }}'.replace(':id', id),
-      type: 'GET',
-      success: function(response) {
-        $('#form-edit').removeClass('d-none');
-        $('#loading-modal-edit').addClass('d-none');
+      $.ajax({
+        url: '{{ route("bahasa.get", ":id") }}'.replace(':id', id),
+        type: 'GET',
+        success: function(response) {
+          $('#form-edit').removeClass('d-none');
+          $('#loading-modal-edit').addClass('d-none');
 
-        let data = response;
-        $('#nama_bahasa_edit').val(data.nama_bahasa);
-        $('#harga_bahasa_edit').val(data.harga_bahasa); 
+          let data = response;
+          $('#nama_bahasa_edit').val(data.nama_bahasa);
+          $('#harga_bahasa_edit').val(data.harga_bahasa); 
 
-        $('#edit-modal').modal('show');
-      },
-      error: function(xhr, status, error) {
-        $('#form-edit').removeClass('d-none');
-        $('#loading-modal-edit').addClass('d-none');
-        console.error("Error fetching data:", error);
-      }
+          $('#edit-modal').modal('show');
+        },
+        error: function(xhr, status, error) {
+          $('#form-edit').removeClass('d-none');
+          $('#loading-modal-edit').addClass('d-none');
+          console.error("Error fetching data:", error);
+        }
+      });
     });
+
+
+    setupFormSubmit('#create-bahasa', '{{ route("bahasa.store") }}', '#datatables', 'Bahasa created successfully!', true, '#create-modal');
+
+    setupFormSubmit('#edit-bahasa', '{{ route("bahasa.update", ":id") }}', '#datatables', 'Bahasa updated successfully!',false, '#edit-modal');
+
+    setupDeleteButton('.delete-btn', '{{ route("bahasa.destroy", ":id") }}', '#datatables');
+
   });
-
-
-  setupFormSubmit('#create-bahasa', '{{ route("bahasa.store") }}', '#datatables', 'Bahasa created successfully!', true, '#create-modal');
-
-  setupFormSubmit('#edit-bahasa', '{{ route("bahasa.update", ":id") }}', '#datatables', 'Bahasa updated successfully!',false, '#edit-modal');
-
-  setupDeleteButton('.delete-btn', '{{ route("bahasa.destroy", ":id") }}', '#datatables');
-
- });
 
 </script>
 

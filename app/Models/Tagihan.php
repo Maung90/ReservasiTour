@@ -11,6 +11,7 @@ class Tagihan extends Model
 {
     /** @use HasFactory<\Database\Factories\TagihanFactory> */
     use HasFactory,HasUuids,TracksUser;
+    // use HasFactory,HasUuids;
     protected $keyType = 'string'; // UUID adalah string
     public $incrementing = false; // Non-incremental ID
     
@@ -18,7 +19,15 @@ class Tagihan extends Model
         'total',
         'status',
         'reservasi_id',
+        // 'created_by',
+        // 'updated_by',
     ];
+    public function scopeForRoleReservasi($query, $userId, $role)
+    {
+        return $query->when($role == 5, function ($q) use ($userId) {
+            $q->where('reservasis.created_by', $userId);
+        });
+    }
 
     public function reservasi()
     {

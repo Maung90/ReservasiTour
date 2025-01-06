@@ -46,19 +46,16 @@ class GuideController extends Controller
             return '<span class="badge rounded-pill '.$status.'">'.$row->status.'</span>';
         })
         ->addColumn('action', function ($row) {
-            return '
-            <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-success info-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#info-modal">
-            <i class="ti ti-info-circle"></i>
-            </button>
-            <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#edit-modal">
-            <i class="ti ti-pencil"></i>
-            </button>
-            <button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn" id="sa-confirm" data-id="'.$row->id.'">
-            <i class="ti ti-trash"></i>
-            </button> 
-            ';
+         $role_id = auth()->user()->role_id;
 
-        })->rawColumns(['action','status'])
+         $buttons = '<button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-success info-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#info-modal"> <i class="ti ti-info-circle"></i></button>';
+         if ($role_id == 1) {   
+            $buttons .= '<button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn" id="sa-confirm" data-id="'.$row->id.'"><i class="ti ti-trash"></i></button>
+            <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#edit-modal"> <i class="ti ti-pencil"></i> </button>';
+        }
+        return $buttons;
+    })
+        ->rawColumns(['action','status'])
         ->make(true);
 
         return $data;
@@ -97,7 +94,7 @@ class GuideController extends Controller
     public function destroy($id)
     {
         $guide = Guide::find($id);
-        
+
         if ($guide) {
             $guide->delete();
             return response()->json(['message' => 'Data deleted successfully.']);
@@ -166,7 +163,7 @@ class GuideController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        
+
         try {
             $guide = Guide::findOrFail($id);
 

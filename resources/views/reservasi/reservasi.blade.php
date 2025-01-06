@@ -82,8 +82,7 @@
 					<option value="{{$sopir->id}}"> {{ $sopir->nama_sopir }}</option>
 					@endforeach
 				</select>
-			</div>
-			<x-input id="remarks" type="text" name="remarks">Pickup Time</x-input>
+			</div> 
 		</div>
 
 		<div class="col-4">

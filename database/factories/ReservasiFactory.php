@@ -22,7 +22,7 @@ class ReservasiFactory extends Factory
     protected $model = \App\Models\Reservasi::class;
     public function definition(): array
     {
-         return [
+        return [
             'dob' => $this->faker->date(),
             'tour_date' => $this->faker->date(),
             'program_id' => Program::inRandomOrder()->value('id'), 

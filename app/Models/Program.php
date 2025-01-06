@@ -11,11 +11,13 @@ class Program extends Model
     /** @use HasFactory<\Database\Factories\ProgramFactory> */
 
     use TracksUser, HasFactory;
-    
+    // use HasFactory;
     protected $fillable = [
         'nama_program',
         'deskripsi',
         'durasi',
+        // 'created_by',
+        // 'updated_by',
     ];
 
     public function creator()

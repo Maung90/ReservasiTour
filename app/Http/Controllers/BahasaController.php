@@ -44,6 +44,7 @@ class BahasaController extends Controller
             ';
 
         })
+        ->rawColumns(['action'])
         ->make(true);
 
         return $data;

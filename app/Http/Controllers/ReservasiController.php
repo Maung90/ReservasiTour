@@ -67,19 +67,27 @@ class ReservasiController extends Controller
             return $row->contact;
         })
         ->addColumn('action', function ($row) {
-            return '
+            $user = auth()->user();
+            $buttons = '
             <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-success info-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#info-modal">
             <i class="ti ti-info-circle"></i>
-            </button>
-            <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#edit-modal">
-            <i class="ti ti-pencil"></i>
-            </button>
-            <button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn" id="sa-confirm" data-id="'.$row->id.'">
-            <i class="ti ti-trash"></i>
-            </button>
-            ';
+            </button>';
+            if ($user->role_id == 3 || $user->role_id == 1) {
+                $buttons .= '
+                <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#edit-modal">
+                <i class="ti ti-pencil"></i>
+                </button>';
+            }
+            if ($user->role_id == 1) {
+                $buttons .= '
+                <button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn" id="sa-confirm" data-id="'.$row->id.'">
+                <i class="ti ti-trash"></i>
+                </button>';
+            }
+            return $buttons;
 
         })
+        ->rawColumns(['action'])
         ->make(true);
 
         return $data;
@@ -147,6 +155,9 @@ class ReservasiController extends Controller
             $reservasi = $this->reservasiService->createReservasi($request);
             $this->reservasiService->handleActivities($request, $reservasi->id);
             $this->reservasiService->handleFlights($request, $reservasi->id);
+            $this->reservasiService->updateGuideStatusOnReservasi($reservasi->id, $request->guide_id);
+            $this->reservasiService->updateSopirStatusOnReservasi($reservasi->id, $request->sopir_id);
+            $this->reservasiService->updateKendaraanStatusOnReservasi($reservasi->id, $request->kendaraan_id);
 
             $total = $this->reservasiService->calculateTotal($request);
             $this->reservasiService->updateOrCreateTagihan($reservasi->id, $total);
@@ -172,6 +183,9 @@ class ReservasiController extends Controller
             $this->reservasiService->updateReservasi($reservasi, $request);
             $this->reservasiService->updateActivities($reservasi->id, $request);
             $this->reservasiService->updateFlightDetails($reservasi->id, $request);
+            $this->reservasiService->updateGuideStatusOnReservasi($reservasi->id, $request->guide_id);
+            $this->reservasiService->updateSopirStatusOnReservasi($reservasi->id, $request->sopir_id);
+            $this->reservasiService->updateKendaraanStatusOnReservasi($reservasi->id, $request->transport_id);
 
             $total = $this->reservasiService->calculateTotal($request);
             $this->reservasiService->updateOrCreateTagihan($reservasi->id, $total);

@@ -9,6 +9,7 @@ use Midtrans\Snap;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class TagihanController extends Controller
 {
@@ -18,8 +19,12 @@ class TagihanController extends Controller
     }
     public function tableTagihan() 
     {
-        $tagihans = Tagihan::with(['reservasi','creator','updator'])->orderBy('id', 'desc')->get();
-
+        $user = auth()->user();
+        if ($user->role_id == 5) {
+            $tagihans = Tagihan::with(['reservasi'])->where('created_by',$user->id)->orderBy('id', 'desc')->get();
+        }else{
+            $tagihans = Tagihan::with(['reservasi'])->orderBy('id', 'desc')->get();
+        }
         return DataTables::of($tagihans)
         ->addColumn('no', function ($row) {
             static $counter = 0;
@@ -35,24 +40,28 @@ class TagihanController extends Controller
             $status = $row->status == "paid" ? " bg-success" : "bg-danger";
             return '<span class="badge rounded-pill '.$status.'">'.$row->status.'</span>';
         })
-        ->addColumn('created_by', function ($row) {
-            return $row->creator->nama;
-        })
-        ->addColumn('updated_by', function ($row) {
-            return $row->updator->nama;
-        })
-        ->addColumn('action', function ($row) {
-            return '
+        ->addColumn('action', function ($row) use ($user){
+            
+            $buttons = '
+            <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-success info-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#info-modal">
+            <i class="ti ti-info-circle"></i>
+            </button>
             <a class="capitalize btn btn-sm waves-effect waves-light btn-primary pay-btn" href="'.route('tagihan.payment',$row->id).'">
             <i class="ti ti-credit-card"></i>
-            </a>
-            <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#edit-modal">
-            <i class="ti ti-pencil"></i>
-            </button>
-            <button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn" id="sa-confirm" data-id="'.$row->id.'">
-            <i class="ti ti-trash"></i>
-            </button>
-            ';
+            </a>';
+            if ($user->role_id == 4 || $user->role_id == 1) {
+                $buttons .= '
+                <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#edit-modal">
+                <i class="ti ti-pencil"></i>
+                </button>';
+            }
+            if ($user->role_id == 1) {
+                $buttons .= '
+                <button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn" id="sa-confirm" data-id="'.$row->id.'">
+                <i class="ti ti-trash"></i>
+                </button>';
+            }
+            return $buttons;
 
         })
         ->rawColumns(['action','status'])

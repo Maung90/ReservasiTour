@@ -46,19 +46,26 @@ class ProdukController extends Controller
             return $row->tipe_produk;
         })
         ->addColumn('action', function ($row) {
-            return '
-            <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-success info-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#info-modal">
+            $role_id = auth()->user()->role_id;
+
+            $buttons = '<button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-success info-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#info-modal">
             <i class="ti ti-info-circle"></i>
-            </button>
-            <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#edit-modal">
-            <i class="ti ti-pencil"></i>
-            </button>
-            <button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn" id="sa-confirm" data-id="'.$row->id.'">
-            <i class="ti ti-trash"></i>
-            </button>
-            ';
+            </button>';
+            if ($role_id == 1 || $role_id == 2) {   
+                $buttons .= '
+                <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#edit-modal">
+                <i class="ti ti-pencil"></i>
+                </button>';
+            }
+            if ($role_id == 1) {   
+                $buttons .= '<button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn" id="sa-confirm" data-id="'.$row->id.'">
+                <i class="ti ti-trash"></i>
+                </button>';
+            }
+            return $buttons;
 
         })
+        ->rawColumns(['action'])
         ->make(true);
 
         return $data;

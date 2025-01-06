@@ -15,17 +15,15 @@
     <tr>
       <th>No</th>
       <th>Tour Code</th>
-      {{-- <th>Deskripsi</th> --}}
       <th>Total</th>
       <th>Status</th>
-      <th>Dibuat Oleh</th>
-      <th>DiUpdate Oleh</th>
       <th>Aksi</th>
     </tr>
   </thead>
 </x-datatable> 
 
 <!-- modal update tagihan -->
+@if(session('user.role') == 4 || session('user.role') == 1)
 <x-modal id="edit-modal" labelId="editLabel" title="Edit tagihan" formId="edit-tagihan" method="PUT">
   <x-loading-spinner id="loading-modal-edit"/>
   <div id="form-edit">
@@ -36,6 +34,7 @@
     </select>
   </div>
 </x-modal>
+@endif
 <!-- tutup modal update tagihan -->
 <x-loading-spinner id="loading-spinner"/>
 @endsection
@@ -52,8 +51,6 @@
      // { data: 'deskripsi', name: 'deskripsi' },
      { data: 'total', name: 'total' ,  render: function(data, type, row) { return `Rp. ${parseInt(data).toLocaleString('id-ID')}`; } }, 
      { data: 'status', name: 'status' },
-     { data: 'created_by', name: 'created_by' },
-     { data: 'updated_by', name: 'updated_by' },
      { data: 'action', name: 'action', orderable: false, searchable: false },
      ]
     );

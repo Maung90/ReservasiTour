@@ -17,7 +17,9 @@
       <th>Nama Sopir</th>
       <th>No Telp</th>
       <th>Status</th>
+      @if(auth()->user()->role_id != 3 ):
       <th>Aksi</th>
+      @endif
     </tr>
   </thead>
 </x-datatable> 
@@ -63,13 +65,14 @@
 <script>
 
   $(document).ready(function () {
+    var userRoleId = {{ auth()->user()->role_id }};
     initDataTable('#datatables', '{{ route('sopir.tableSopir') }}', 
       [
         { data: 'no', name: 'no' },
         { data: 'nama_sopir', name: 'nama_sopir' },
         { data: 'no_telp', name: 'no_telp' },
         { data: 'status', name: 'status' },
-        { data: 'action', name: 'action', orderable: false, searchable: false },
+        { data: 'action', name: 'action', orderable: false, searchable: false,  visible: userRoleId !== 3 },
         ]
       );
 
@@ -103,11 +106,11 @@
       });
     });
 
- setupFormSubmit('#create-sopir', '{{ route("sopir.store") }}', '#datatables', 'Sopir created successfully!', true, '#create-modal');
+    setupFormSubmit('#create-sopir', '{{ route("sopir.store") }}', '#datatables', 'Sopir created successfully!', true, '#create-modal');
 
-  setupFormSubmit('#edit-sopir', '{{ route("sopir.update", ":id") }}', '#datatables', 'Sopir updated successfully!',false, '#edit-modal');
+    setupFormSubmit('#edit-sopir', '{{ route("sopir.update", ":id") }}', '#datatables', 'Sopir updated successfully!',false, '#edit-modal');
 
-  setupDeleteButton('.delete-btn', '{{ route("sopir.destroy", ":id") }}', '#datatables');
+    setupDeleteButton('.delete-btn', '{{ route("sopir.destroy", ":id") }}', '#datatables');
 
   });
 

@@ -13,8 +13,6 @@
     <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/favicon.ico') }}" />
 
     <title>Login</title>
-
-    <link rel="stylesheet" href="{{ asset('assets/libs/toastr/toastr.css') }}">
     <link id="themeColors" rel="stylesheet" href="{{ asset('assets/css/style.css') }}" />
 </head>
 <body>
@@ -61,12 +59,18 @@
                                             <span class="ti ti-refresh fs-4"></span>
                                         </button>
                                     </div>
-                                    <input class="form-control" type="text" name="captcha" id="captcha" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2" id="submit-btn">
-                                    <span class="spinner-border spinner-border-sm d-none" id="loading-spinner" role="status" aria-hidden="true"></span>
-                                    <span class="mx-2">Sign In</span>
-                                </button>
+                                <div class="row gx-1">
+                                    <div class="col-5">
+                                        <input class="form-control" type="text" name="captcha" id="captcha" placeholder="*****" required>
+                                    </div>
+                                    <div class="col-7">
+                                        <button type="submit" class="btn btn-primary w-100 mb-4 rounded-2" id="submit-btn">
+                                            <span class="spinner-border spinner-border-sm d-none" id="loading-spinner" role="status" aria-hidden="true"></span>
+                                            <span class="mx-2">Sign In</span>
+                                        </button>
+                                    </div>
+                                </div>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <p class="fs-4 mb-0 fw-medium">Forgot Password ?</p>
                                     <a class="text-primary fw-medium ms-2" href="./authentication-register.html">Create new password</a>
@@ -82,7 +86,7 @@
 
 <script src="{{ asset('assets/libs/jquery/dist/jquery.min.js') }}"></script>
 <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
-<script src="{{ asset('assets/libs/toastr/toastr.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
 <script src="{{ asset('assets/js/crud/crud.js') }}"></script>
 @if (session('error'))
 <script>
@@ -114,11 +118,11 @@
                     $('meta[name="csrf-token"]').attr('content', response.csrf_token);
                     $('#loading-spinner').addClass('d-none');
                     window.location.href = 'dashboard';
-                    refreshCaptcha();
                 },
                 error: function (xhr, status, error) {
                     refreshCaptcha();
                     $('#loading-spinner').addClass('d-none');
+                    $('#captcha').val('');
                     showToastr('error',xhr.responseJSON.message,'Warning');
                 }
             });

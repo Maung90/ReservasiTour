@@ -20,7 +20,9 @@
     <th>Durasi</th>
     <th>Created_by</th>
     <th>Updated_by</th>
+    @if(auth()->user()->role_id != 3 ):
     <th>Aksi</th>
+    @endif
   </tr>
 </thead>
 </x-datatable>
@@ -52,58 +54,58 @@
 <script>
   $(document).ready(function () {
 
-
-   initDataTable('#datatables', '{{ route('program.tableProgram') }}', 
-    [
-      { data: 'no', name: 'no' },
-      { data: 'nama_program', name: 'nama_program' },
-      { data: 'deskripsi', name: 'deskripsi' },
-      { data: 'durasi', name: 'durasi' },
-      { data: 'created_by', name: 'created_by' },
-      { data: 'updated_by', name: 'updated_by' },
-      { data: 'action', name: 'action', orderable: false, searchable: false },
-      ]
-    );
+    var userRoleId = {{ auth()->user()->role_id }};
+    initDataTable('#datatables', '{{ route('program.tableProgram') }}', 
+      [
+        { data: 'no', name: 'no' },
+        { data: 'nama_program', name: 'nama_program' },
+        { data: 'deskripsi', name: 'deskripsi' },
+        { data: 'durasi', name: 'durasi' },
+        { data: 'created_by', name: 'created_by' },
+        { data: 'updated_by', name: 'updated_by' },
+        { data: 'action', name: 'action', orderable: false, searchable: false , visible: userRoleId !== 3 },
+        ]
+      );
 
 
   // modal edit 
-   $(document).on('click', '.edit-btn', function() {
-    let id = $(this).data('id');
-    $('#edit-program').data('id', id);
+    $(document).on('click', '.edit-btn', function() {
+      let id = $(this).data('id');
+      $('#edit-program').data('id', id);
 
-    $('#form-edit').addClass('d-none');
-    $('#loading-modal-edit').removeClass('d-none');
+      $('#form-edit').addClass('d-none');
+      $('#loading-modal-edit').removeClass('d-none');
 
-    $.ajax({
-      url: '{{ route("program.get", ":id") }}'.replace(':id', id),
-      type: 'GET',
-      success: function(response) {
-        $('#form-edit').removeClass('d-none');
-        $('#loading-modal-edit').addClass('d-none');
+      $.ajax({
+        url: '{{ route("program.get", ":id") }}'.replace(':id', id),
+        type: 'GET',
+        success: function(response) {
+          $('#form-edit').removeClass('d-none');
+          $('#loading-modal-edit').addClass('d-none');
 
-        let data = response;
-        $('#nama_program_edit').val(data.nama_program);
-        $('#deskripsi_edit').val(data.deskripsi);
-        $('#durasi_edit').val(data.durasi);
+          let data = response;
+          $('#nama_program_edit').val(data.nama_program);
+          $('#deskripsi_edit').val(data.deskripsi);
+          $('#durasi_edit').val(data.durasi);
 
-        $('#edit-modal').modal('show');
-      },
-      error: function(xhr, status, error) {
-        $('#form-edit').removeClass('d-none');
-        $('#loading-modal-edit').addClass('d-none');
-        console.error("Error fetching data:", error);
-      }
+          $('#edit-modal').modal('show');
+        },
+        error: function(xhr, status, error) {
+          $('#form-edit').removeClass('d-none');
+          $('#loading-modal-edit').addClass('d-none');
+          console.error("Error fetching data:", error);
+        }
+      });
     });
+
+
+    setupFormSubmit('#create-program', '{{ route("program.store") }}', '#datatables', 'Program created successfully!', true, '#create-modal');
+
+    setupFormSubmit('#edit-program', '{{ route("program.update", ":id") }}', '#datatables', 'Program updated successfully!',false, '#edit-modal');
+
+    setupDeleteButton('.delete-btn', '{{ route("program.destroy", ":id") }}', '#datatables');
+
   });
-
-
-   setupFormSubmit('#create-program', '{{ route("program.store") }}', '#datatables', 'Program created successfully!', true, '#create-modal');
-
-   setupFormSubmit('#edit-program', '{{ route("program.update", ":id") }}', '#datatables', 'Program updated successfully!',false, '#edit-modal');
-
-   setupDeleteButton('.delete-btn', '{{ route("program.destroy", ":id") }}', '#datatables');
-
- });
 
 </script>
 

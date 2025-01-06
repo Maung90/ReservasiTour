@@ -10,6 +10,7 @@ class Reservasi extends Model
 {
     /** @use HasFactory<\Database\Factories\ReservasiFactory> */
     use TracksUser, HasFactory;
+    // use HasFactory;
     protected $fillable = [
         'tour_code',
         'tour_date',
@@ -25,12 +26,21 @@ class Reservasi extends Model
         'transport_id',
         'sopir_id',
         'bahasa_id',
+        // 'created_by',
+        // 'updated_by',
     ];
-      public static function generateTourCode()
+    public static function generateTourCode()
     {
         $lastRecord = self::orderBy('id', 'desc')->first();
         $lastId = $lastRecord ? $lastRecord->id : 0;
         return 'TC-' . str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
+    }
+
+    public function scopeForRole($query, $userId, $role)
+    {
+        return $query->when($role == 5, function ($q) use ($userId) {
+            $q->where('created_by', $userId);
+        });
     }
 
     public function activities()

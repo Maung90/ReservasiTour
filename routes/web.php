@@ -32,6 +32,10 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware(EnsureAuthenticated::class)->group(function () {
     Route::controller(DashboardController::class)->group(function () {
         Route::get('/dashboard', 'dashboard');
+        Route::get('/dashboard/getAgentWeekChart','getAgentWeekChart')->name('dashboard.getAgentWeekChart');
+        Route::get('/dashboard/getAgentYearChart','getAgentYearChart')->name('dashboard.getAgentYearChart');
+        Route::get('/dashboard/getTopProgram','getTopProgram')->name('dashboard.getTopProgram');
+        Route::get('/dashboard/getDailyIncome/{days}','getDailyIncome')->name('dashboard.getDailyIncome');
     }); 
 });
 
