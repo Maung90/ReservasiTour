@@ -62,7 +62,7 @@
                                 </div>
                                 <div class="row gx-1">
                                     <div class="col-5">
-                                        <input class="form-control" type="text" name="captcha" id="captcha" placeholder="*****" required>
+                                        <input class="form-control text-center"  type="text" name="captcha" id="captcha" placeholder="*****" required>
                                     </div>
                                     <div class="col-7">
                                         <button type="submit" class="btn btn-primary w-100 mb-4 rounded-2" id="submit-btn">

@@ -14,7 +14,7 @@
 	<meta name="keywords" content="Senang Tours & Travel" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<!--  Favicon -->
-	<link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/favicon.ico') }}" />
+	<link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/logo_senangtour.png') }}" />
 	<!-- Owl Carousel  -->
 	<link rel="stylesheet" href="{{ asset('assets/libs/owl.carousel/dist/assets/owl.carousel.min.css') }}">
 	<link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}">
@@ -39,9 +39,9 @@
 			<!-- Sidebar scroll-->
 			<div>
 				<div class="brand-logo d-flex align-items-center justify-content-between">
-					<a href="./index.html" class="text-nowrap logo-img">
-						<img src="{{ asset('assets/images/logos/dark-logo.svg') }}" class="dark-logo" width="180" alt="" />
-						<img src="{{ asset('assets/images/logos/light-logo.svg') }}" class="light-logo"  width="180" alt="" />
+					<a href="/dashboard" class="text-nowrap logo-img">
+						<img src="{{ asset('assets/images/logos/logo_senangtour.png') }}" class="dark-logo" width="50" alt="" /> 
+						<span class="fs-6">SenangTours</span>
 					</a>
 					<div class="close-btn d-lg-none d-block sidebartoggler cursor-pointer" id="sidebarCollapse">
 						<i class="ti ti-x fs-8 text-muted"></i>
@@ -66,7 +66,7 @@
 						<!-- =================== -->
 						<!-- MENU AGENT -->
 						<!-- =================== --> 
-						@if(	session('user.role') == 5) : 
+						@if(	session('user.role') == 5) 
 
 						<li class="nav-small-cap mt-0">
 							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
@@ -92,7 +92,7 @@
 						<!-- =================== -->
 						<!-- MENU ACCOUNTING -->
 						<!-- =================== --> 
-						@if(	session('user.role') == 4) : 
+						@if(	session('user.role') == 4) 
 						<li class="nav-small-cap">
 							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
 							<span class="hide-menu">TAGIHAN</span>
@@ -152,7 +152,7 @@
 						<!-- =================== -->
 						<!-- MENU PRODUCTION -->
 						<!-- =================== --> 
-						@if(	session('user.role') == 2) : 
+						@if(	session('user.role') == 2) 
 
 						<li class="nav-small-cap mt-0">
 							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
@@ -169,14 +169,22 @@
 						<!-- =================== -->
 						<!-- MENU MASTER / ADMIN -->
 						<!-- =================== -->
-						@if(	session('user.role') == 1) : 
+						@if(	session('user.role') == 1) 
+						<li class="nav-small-cap">
+							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
+							<span class="hide-menu">Reservasi</span>
+						</li>
+						<x-sidebar-item icon="ti ti ti-file-dollar" url="tagihan">
+							Tagihan
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti ti-shopping-cart" url="reservasi">
+							Reservasi
+						</x-sidebar-item>
+						
 						<li class="nav-small-cap">
 							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
 							<span class="hide-menu">Data Management</span>
 						</li>
-						<x-sidebar-item icon="ti ti ti-shopping-cart" url="reservasi">
-							Reservasi
-						</x-sidebar-item>
 						<x-sidebar-item icon="ti ti-color-swatch" url="produk">
 							Produk
 						</x-sidebar-item>

@@ -18,12 +18,12 @@ use App\Services\GuideService;
 use App\Services\ProgramService;
 use App\Services\KendaraanService;
 use App\Services\ReservasiService;
+use App\Services\ProdukService;
 
 class ReservasiController extends Controller
 {
-    protected $bahasaService, $guideService, $kendaraanService, $sopirService, $programService, $reservasiService;
-
-    public function __construct(BahasaService $bahasaService, SopirService $sopirService, GuideService $guideService, ProgramService $programService, KendaraanService $kendaraanService, ReservasiService $reservasiService)
+    protected $bahasaService, $guideService, $kendaraanService, $sopirService, $programService, $reservasiService, $role;
+    public function __construct(BahasaService $bahasaService, SopirService $sopirService, GuideService $guideService, ProgramService $programService, KendaraanService $kendaraanService, ReservasiService $reservasiService, ProdukService $produkService)
     {
         $this->bahasaService = $bahasaService;
         $this->sopirService = $sopirService;
@@ -31,6 +31,10 @@ class ReservasiController extends Controller
         $this->programService = $programService;
         $this->kendaraanService = $kendaraanService;
         $this->reservasiService = $reservasiService;
+        $this->produkService= $produkService;
+
+
+        $this->role = auth()->user()->role_id;
     }
     public function reservasi()
     {
@@ -41,6 +45,70 @@ class ReservasiController extends Controller
         $kendaraans = $this->kendaraanService->getKendaraan();
 
         return view('reservasi.reservasi',compact('bahasas','guides', 'sopirs', 'programs', 'kendaraans'));
+    }
+
+    public function paketReservasi()
+    {
+        $bahasas = $this->bahasaService->getBahasa(); 
+        $programs = $this->programService->getProgram(); 
+
+        return view('reservasi.paket',compact('bahasas', 'programs'));
+    }
+    public function customReservasi()
+    {
+        $bahasas = $this->bahasaService->getBahasa();
+        $produks = $this->produkService->getProduk();
+        return view('reservasi.custom',compact('bahasas', 'produks'));
+    }
+
+    public function getReservasi()
+    {
+        $datas = Reservasi::with([
+            'guide', 'sopir', 'transport', 'bahasa', 
+            'program', 'creator', 'updator', 'flightCode', 'activities'
+        ])->get();
+
+        $arr = $datas->map(function ($reservasi) {
+            $flightArrivals = collect($reservasi->flightCode)->where('type', 'arrival')->values();
+            $flightDepartures = collect($reservasi->flightCode)->where('type', 'departure')->values();
+            $activities = collect($reservasi->activities)->values();
+
+            return [
+                'id' => $reservasi->id ?? '-',
+                'title' => $reservasi->tour_code ?? '-',
+                'start' => optional(Carbon::parse($reservasi->tour_date))->format('Y-m-d H:i:s') ?? '-',
+                'tour_code' => $reservasi->tour_code ?? '-',
+                'contact' => $reservasi->contact ?? '-',
+                'dob' => optional(Carbon::parse($reservasi->dob))->format('d F Y') ?? '-',
+                'guest_name' => $reservasi->guest_name ?? '-',
+                'hotel' => $reservasi->hotel ?? '-',
+                'pax' => $reservasi->pax ?? '-',
+                'pickup' => $reservasi->pickup ?? '-',
+                'remarks' => $reservasi->remarks ?? '-',
+                'tour_date' => optional(Carbon::parse($reservasi->tour_date))->format('d F Y') ?? '-',
+                'updated_at' => $reservasi->updated_at ?? '-',
+
+                'flight_code_arrival' => $flightArrivals->pluck('flight_code')->first() ?? '-',
+                'flight_code_departure' => $flightDepartures->pluck('flight_code')->first() ?? '-',
+                'eta' => $flightArrivals->pluck('time')->first() ?? '-',
+                'etd' => $flightDepartures->pluck('time')->first() ?? '-',
+
+                'activities' => $activities->pluck('aktivitas')->reverse()->first() ?? '-',
+
+                'dob_edit' => $reservasi->dob ?? '-',
+                'pickup_edit' => $reservasi->pickup ?? '-',
+                'tour_date_edit' => $reservasi->tour_date ?? '-',
+                'guide_id' => $reservasi->guide_id ?? '-',
+                'bahasa_id' => $reservasi->bahasa_id ?? '-',
+                'program_id' => $reservasi->program_id ?? 'Custom Reservasi',
+                'sopir_id' => $reservasi->sopir_id ?? '-',
+                'transport_id' => $reservasi->transport_id ?? '-',
+            ];
+        });
+
+        return response()->json($arr);
+
+
     }
     public function tablereservasi() 
     {
@@ -97,16 +165,16 @@ class ReservasiController extends Controller
     {
         $reservasi = Reservasi::with(['guide','sopir','transport','bahasa','program','creator','updator','flightCode','activities'])->find($id);
         $arr = [
-            'tour_code' => $reservasi->tour_code,
-            'contact' => $reservasi->contact,
-            'dob' => Carbon::parse($reservasi->dob)->format('d F Y'),
-            'guest_name' => $reservasi->guest_name,
-            'hotel' => $reservasi->hotel,
-            'pax' => $reservasi->pax,
-            'pickup' => Carbon::parse($reservasi->pickup)->format('d F Y, H:m'),
-            'remarks' => $reservasi->remarks,
-            'tour_date' => Carbon::parse($reservasi->tour_date)->format('d F Y'),
-            'updated_at' => $reservasi->updated_at,
+            'tour_code' => $reservasi->tour_code ?? '-',
+            'contact' => $reservasi->contact ?? '-',
+            'dob' => Carbon::parse($reservasi->dob)->format('d F Y') ?? '-',
+            'guest_name' => $reservasi->guest_name ?? '-',
+            'hotel' => $reservasi->hotel ?? '-',
+            'pax' => $reservasi->pax ?? '-',
+            'pickup' => Carbon::parse($reservasi->pickup)->format('d F Y, H:m')?? '-',
+            'remarks' => $reservasi->remarks?? '-',
+            'tour_date' => Carbon::parse($reservasi->tour_date)->format('d F Y') ?? '-',
+            'updated_at' => $reservasi->updated_at ?? '-',
 
             'flight_code_depacture' => count($reservasi->flightCode) != 0 ? $reservasi->flightCode[0]->flight_code : '-',
             'flight_code_arrival' => count($reservasi->flightCode)  != 0 ? $reservasi->flightCode[1]->flight_code : '-',
@@ -114,23 +182,23 @@ class ReservasiController extends Controller
             'etd' => count($reservasi->flightCode)  != 0 ? $reservasi->flightCode[1]->time : '-',
             'activities' => count($reservasi->activities) != 0 ? $reservasi->activities[0]->aktivitas : '-',
 
-            'guide' => $reservasi->guide->nama_guide,
-            'bahasa' => $reservasi->bahasa->nama_bahasa,
-            'program' => $reservasi->program->nama_program,
-            'sopir' => $reservasi->sopir->nama_sopir,
-            'transport' => $reservasi->transport->jenis_kendaraan,
-            'creator' => $reservasi->creator->nama,
-            'updator' => $reservasi->updator->nama,
+            'guide' => $reservasi->guide->nama_guide ?? '-',
+            'bahasa' => $reservasi->bahasa->nama_bahasa ?? '-',
+            'program' => $reservasi->program->nama_program ?? '-',
+            'sopir' => $reservasi->sopir->nama_sopir ?? '-',
+            'transport' => $reservasi->transport->jenis_kendaraan ?? '-',
+            'creator' => $reservasi->creator->nama ?? '-',
+            'updator' => $reservasi->updator->nama ?? '-',
 
 
-            'dob_edit' => $reservasi->dob,
-            'pickup_edit' => $reservasi->pickup,
-            'tour_date_edit' => $reservasi->tour_date,
-            'guide_id' => $reservasi->guide_id,
-            'bahasa_id' => $reservasi->bahasa_id,
+            'dob_edit' => $reservasi->dob ?? '-',
+            'pickup_edit' => $reservasi->pickup ?? '-',
+            'tour_date_edit' => $reservasi->tour_date ?? '-',
+            'guide_id' => $reservasi->guide_id ?? '-',
+            'bahasa_id' => $reservasi->bahasa_id ?? '-',
             'program_id' => $reservasi->program_id,
-            'sopir_id' => $reservasi->sopir_id,
-            'transport_id' => $reservasi->transport_id,
+            'sopir_id' => $reservasi->sopir_id ?? '-',
+            'transport_id' => $reservasi->transport_id ?? '-',
         ];
         return response()->json($arr);
     }
@@ -152,13 +220,20 @@ class ReservasiController extends Controller
         $this->reservasiService->validateInput($request);
 
         try {
-            $reservasi = $this->reservasiService->createReservasi($request);
-            $this->reservasiService->handleActivities($request, $reservasi->id);
-            $this->reservasiService->handleFlights($request, $reservasi->id);
-            $this->reservasiService->updateGuideStatusOnReservasi($reservasi->id, $request->guide_id);
-            $this->reservasiService->updateSopirStatusOnReservasi($reservasi->id, $request->sopir_id);
-            $this->reservasiService->updateKendaraanStatusOnReservasi($reservasi->id, $request->kendaraan_id);
-
+            if ($this->role == 5) { 
+                $reservasi = $this->reservasiService->createReservasi($request);
+                $this->reservasiService->handleFlights($request, $reservasi->id);
+                if ($request->program_id == null) {
+                    $this->reservasiService->handleCustomReservasi($request, $reservasi->id);
+                }
+            }else{
+                $reservasi = $this->reservasiService->createReservasi($request);
+                $this->reservasiService->handleActivities($request, $reservasi->id);
+                $this->reservasiService->handleFlights($request, $reservasi->id);
+                $this->reservasiService->updateGuideStatusOnReservasi($reservasi->id, $request->guide_id);
+                $this->reservasiService->updateSopirStatusOnReservasi($reservasi->id, $request->sopir_id);
+                $this->reservasiService->updateKendaraanStatusOnReservasi($reservasi->id, $request->kendaraan_id);
+            }
             $total = $this->reservasiService->calculateTotal($request);
             $this->reservasiService->updateOrCreateTagihan($reservasi->id, $total);
 

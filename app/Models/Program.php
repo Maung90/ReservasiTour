@@ -29,4 +29,9 @@ class Program extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Produk::class, 'detail_programs', 'program_id', 'produk_id');
+    }
 }

@@ -162,7 +162,7 @@
 					<label for="program_id">Program</label>
 					<select class="form-control" id="program_id-edit" name="program_id">
 						<option disabled selected>Select Program</option>
-						@foreach($programs as $program):
+						@foreach($programs as $program)
 						<option value="{{$program->id}}"> {{ $program->nama_program }}</option>
 						@endforeach
 					</select>
@@ -209,7 +209,7 @@
 						@endforeach
 					</select>
 				</div>
-				<x-input id="remarks-edit" type="text" name="remarks">Pickup Time</x-input>
+				<x-input id="remarks-edit" type="text" name="remarks">Remarks</x-input>
 			</div>
 
 			<div class="col-4">
@@ -360,7 +360,7 @@
 
 	setupFormSubmit('#create-reservasi', '{{ route("reservasi.store") }}', '#datatables', 'Reservasi created successfully!', true, '#create-modal');
 
-  setupFormSubmit('#edit-reservasi', '{{ route("reservasi.update", ":id") }}', '#datatables', 'Reservasi updated successfully!',false, '#edit-modal');
+	setupFormSubmit('#edit-reservasi', '{{ route("reservasi.update", ":id") }}', '#datatables', 'Reservasi updated successfully!',false, '#edit-modal');
 
 	setupDeleteButton('.delete-btn', '{{ route("reservasi.destroy", ":id") }}', '#datatables');
 </script>

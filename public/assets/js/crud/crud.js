@@ -68,10 +68,11 @@ function setupFormSubmit(formSelector, ajaxUrlTemplate, tableSelector, successMe
 
     $(formSelector).find('.error-message').remove(); 
     $(formSelector).find('.is-invalid').removeClass('is-invalid');
+    let methodType = isCreate ? 'POST' : 'PUT';
 
     $.ajax({
       url: submitUrl,
-      type: 'POST',
+      type: methodType,
       data: formData,
       contentType: false,
       processData: false,
@@ -79,8 +80,12 @@ function setupFormSubmit(formSelector, ajaxUrlTemplate, tableSelector, successMe
         $('#btn').removeClass('disabled');
         $('#btn-loading-spinner').addClass('d-none');
         $(formSelector).trigger('reset');
-        $(tableSelector).DataTable().ajax.reload();
-        $(modalSelector).modal('hide');
+        if (tableSelector != null) {
+          $(tableSelector).DataTable().ajax.reload();
+        }
+        if (modalSelector != null) {
+          $(modalSelector).modal('hide');
+        }
         showToastr('success', successMessage, 'Success!');
       },
       error: function (xhr, status, error) {

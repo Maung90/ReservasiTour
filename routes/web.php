@@ -115,7 +115,11 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
         Route::get('/reservasi/table/reservasi', 'tableReservasi')->name('reservasi.tableReservasi');
         Route::get('/reservasi', 'reservasi');
 
+        Route::get('reservasi-paket', 'paketReservasi');
+        Route::get('reservasi-custom', 'customReservasi');
+
         Route::post('/reservasi', 'store')->name('reservasi.store'); 
+        Route::get('/reservasi/all/', 'getReservasi')->name('reservasi.getReservasi'); 
         Route::get('/reservasi/get/{id}', 'get')->name('reservasi.get'); 
         Route::put('/reservasi/{id}', 'update')->name('reservasi.update');
         Route::delete('/reservasi/{id}', 'destroy')->name('reservasi.destroy');

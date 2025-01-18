@@ -8,6 +8,6 @@ class ProgramService
 {
     public function getProgram()
     {
-        return Program::all();
+        return Program::with('products')->get();
     }
 }

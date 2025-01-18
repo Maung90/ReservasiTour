@@ -70,7 +70,7 @@ class TagihanController extends Controller
 
     public function get($id)
     {
-        $tagihan = Tagihan::find($id);
+        $tagihan = Tagihan::with(['reservasi','creator','updator'])->find($id);
 
         return response()->json($tagihan);
     }

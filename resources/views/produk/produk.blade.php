@@ -88,8 +88,8 @@
   <table class="table border" id="table-info">
     <thead>
       <tr><th>Nama guide</th><td id="nama_produk_info">-</td></tr>
-      <tr><th>No Telp</th><td id="harga_info">-</td></tr>
-      <tr><th>Bahasa</th><td id="area_info">-</td></tr>
+      <tr><th>Harga</th><td id="harga_info">-</td></tr>
+      <tr><th>Area</th><td id="area_info">-</td></tr>
       <tr><th>Tipe Produk</th><td id="tipe_produk_info">-</td></tr>
       <tr><th>Vendor</th><td id="vendor_info">-</td></tr>
       <tr><th>Deskripsi</th><td id="deskripsi_info">-</td></tr>

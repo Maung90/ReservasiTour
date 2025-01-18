@@ -36,6 +36,23 @@
 </x-modal>
 @endif
 <!-- tutup modal update tagihan -->
+
+
+<!-- modal info tagihan -->
+<x-modal id="info-modal" labelId="infoLabel" title="Info Tagihan" formId="info-tagihan" method="POST" :showSaveButton="false">
+  <x-loading-spinner id="loading-info"/>
+  <table class="table border" id="table-info">
+    <thead>
+      <tr><th>Tour Code</th><td id="tour_code_info">-</td></tr>
+      <tr><th>Total</th><td id="total_info">-</td></tr>
+      <tr><th>Status</th><td id="status_info">-</td></tr>
+      <tr><th>Create By</th><td id="created_by_info">-</td></tr>
+      <tr><th>Update By</th><td id="updated_by_info">-</td></tr>
+    </thead>
+  </table>
+</x-modal>
+
+<!-- tutup modal info tagihan -->
 <x-loading-spinner id="loading-spinner"/>
 @endsection
 
@@ -54,6 +71,40 @@
      { data: 'action', name: 'action', orderable: false, searchable: false },
      ]
     );
+
+// modal info
+  $(document).on('click', '.info-btn', function() {
+    let id = $(this).data('id');
+
+    $('#table-info').addClass('d-none');
+    $('#loading-info').removeClass('d-none');
+
+    $.ajax({
+      url: '{{ route("tagihan.get", ":id") }}'.replace(':id', id),
+      type: 'GET',
+      success: function(response) {
+        let data = response;
+
+        $('#loading-info').addClass('d-none');
+        $('#table-info').removeClass('d-none');
+        $('#tour_code_info').text(data.reservasi['tour_code']);
+        $('#total_info').text(data.total);
+        $('#status_info').text(data.status);
+        $('#created_by_info').text(data.creator['nama']);
+        $('#updated_by_info').text(data.updator['nama']);
+
+
+        $('#info-modal').modal('show');
+      },
+      error: function(xhr, status, error) {
+        
+        showToastr('error',error,' Please try again later!');
+        console.error("Error fetching data:", error);
+        $('#loading-info').addClass('d-none');
+        $('#table-info').removeClass('d-none');
+      }
+    });
+  });
 
 
   // modal edit 
