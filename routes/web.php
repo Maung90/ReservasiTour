@@ -13,6 +13,7 @@ use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ActivityController;
 
 use App\Http\Middleware\EnsureAuthenticated;
 
@@ -36,6 +37,18 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
         Route::get('/dashboard/getAgentYearChart','getAgentYearChart')->name('dashboard.getAgentYearChart');
         Route::get('/dashboard/getTopProgram','getTopProgram')->name('dashboard.getTopProgram');
         Route::get('/dashboard/getDailyIncome/{days}','getDailyIncome')->name('dashboard.getDailyIncome');
+    }); 
+});
+
+Route::middleware(EnsureAuthenticated::class)->group(function () {
+    Route::controller(ActivityController::class)->group(function () {
+        Route::get('/activity/table/activity', 'tableActivity')->name('activity.tableActivity');
+        Route::get('/activity', 'activity');
+
+        Route::post('/activity', 'store')->name('activity.store'); 
+        Route::get('/activity/get/{id}', 'get')->name('activity.get'); 
+        Route::put('/activity/{id}', 'update')->name('activity.update');
+        Route::delete('/activity/{id}', 'destroy')->name('activity.destroy');
     }); 
 });
 

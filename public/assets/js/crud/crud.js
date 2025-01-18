@@ -135,41 +135,44 @@ function setupDeleteButton(buttonSelector, ajaxUrlTemplate, tableSelector) {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        $.ajax({
-          url: deleteUrl,
-          type: 'DELETE',
-          data: { _token: $('meta[name="csrf-token"]').attr('content') },
-          success: function (response) {
-            $(tableSelector).DataTable().ajax.reload();
-            showToastr('success',response.message,'Deleted!');
+          $('#loading-spinner').removeClass('d-none');
+       $.ajax({
+        url: deleteUrl,
+        type: 'DELETE',
+        data: { _token: $('meta[name="csrf-token"]').attr('content') },
+        success: function (response) {
+          $(tableSelector).DataTable().ajax.reload();
+          $('#loading-spinner').addClass('d-none');
+          showToastr('success',response.message,'Deleted!');
             // Swal.fire({
             //   title: 'Deleted!',
             //   text: response.message,
             //   icon: 'success',
             //   confirmButtonText: 'OK',
             // });
-          },
-          error: function (xhr, status, error) { 
-            if (xhr.status === 422) {
-              let errors = xhr.responseJSON.message;                
-              Swal.fire({
-                title: 'Delete Failed!',
-                html: errors,
-                icon: 'error',
-                confirmButtonText: 'OK'
-              });
-            } else {
-              Swal.fire({
-                title: 'Error!',
-                text: 'An unexpected error occurred. Please try again later.',
-                icon: 'error',
-                confirmButtonText: 'OK'
-              });
-            }
-          },
-        });
-      }
-    });
+        },
+        error: function (xhr, status, error) { 
+          $('#loading-spinner').addClass('d-none');
+          if (xhr.status === 422) {
+            let errors = xhr.responseJSON.message;                
+            Swal.fire({
+              title: 'Delete Failed!',
+              html: errors,
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: 'An unexpected error occurred. Please try again later.',
+              icon: 'error',
+              confirmButtonText: 'OK'
+            });
+          }
+        },
+      });
+     }
+   });
   });
 }
 function showToastr(type, message, title = '') {

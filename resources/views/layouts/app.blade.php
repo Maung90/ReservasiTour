@@ -110,6 +110,9 @@
 							<i class="ti ti-dots nav-small-cap-icon fs-4"></i>
 							<span class="hide-menu">Reservasi</span>
 						</li>
+						<x-sidebar-item icon="ti ti ti-bike" url="activity">
+							Aktivitas
+						</x-sidebar-item>
 						<x-sidebar-item icon="ti ti ti-shopping-cart" url="reservasi">
 							Reservasi
 						</x-sidebar-item>
@@ -179,6 +182,9 @@
 						</x-sidebar-item>
 						<x-sidebar-item icon="ti ti ti-shopping-cart" url="reservasi">
 							Reservasi
+						</x-sidebar-item>
+						<x-sidebar-item icon="ti ti ti-bike" url="activity">
+							Aktivitas
 						</x-sidebar-item>
 						
 						<li class="nav-small-cap">
