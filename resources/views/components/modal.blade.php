@@ -1,6 +1,6 @@
 <div class="modal {{ $style ?? ''}} fade p-1" id="{{ $id }}" tabindex="-1" aria-labelledby="{{ $labelId }}" aria-hidden="true" style="display: none;">
   <div class="modal-dialog {{ $size ?? 'modal-md' }}">
-    <form id="{{ $formId }}" method="{{ $method }}" {{ $attributes }}>
+    <form id="{{ $formId }}" method="POST" {{ $attributes }}>
       @csrf
       @if(strtoupper($method) !== 'POST')
         @method($method)
