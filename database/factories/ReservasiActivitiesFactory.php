@@ -20,6 +20,7 @@ class ReservasiActivitiesFactory extends Factory
     {
         return [
             'aktivitas' => $this->faker->sentence(),
+            'waktu' => $this->faker->datetime(),
             'reservasi_id' => Reservasi::inRandomOrder()->value('id'),
         ];
     }

@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('reservasi_activities', function (Blueprint $table) {
             $table->id();
-            $table->string('aktivitas');
+            $table->string('aktivitas')->nullable();
+            $table->dateTime('waktu', precision: 0)->nullable();
             $table->unsignedBigInteger('reservasi_id');
             $table->foreign('reservasi_id')->references('id')->on('reservasis')->onDelete('cascade');
             $table->timestamps();

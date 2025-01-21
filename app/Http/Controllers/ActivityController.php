@@ -61,45 +61,39 @@ class ActivityController extends Controller
 
     public function get($id)
     {
-        $activity = ReservasiActivities::with(['reservasi'])->where('reservasi_id',$id)->get();
-
-
-        $activityIdList = $activity->pluck('id')->filter()->toArray();
-        $activityList = $activity->pluck('aktivitas')->filter()->toArray();
-
+        $activity = ReservasiActivities::with(['reservasi'])->where('reservasi_id', $id)->get();
         $firstReservasi = $activity->first()?->reservasi;
 
-        $activityHtml = '<ol class="p-0 m-0">';
-        foreach ($activityList as $aktivitas) {
-            $activityHtml .= "<li>{$aktivitas}</li>";
+        if (!$firstReservasi) {
+            return response()->json(['error' => 'Reservasi tidak ditemukan'], 404);
         }
-        $activityHtml .= '</ol>';
-        $tbody ='';
-        foreach ($activityList as $aktivitas) {
-            $tbody .= '<tr>';
-            $tbody .= "<td>{$firstReservasi->tour_code}</td>";
-            $tbody .= "<td>{$aktivitas}</td>";
-            $tbody .= '<td><button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn" id="sa-confirm" data-id="'.$activity->first()->id.'"><i class="ti ti-trash"></i></button></td>';
-            $tbody .= '</tr>';
-        }
+
+        $datas = $activity->map(function ($activity) use ($firstReservasi) {
+            return [
+                'tbody' => '<tr> <td>' . $firstReservasi->tour_code . '</td> <td>' . $activity->aktivitas . '</td><td>'. Carbon::parse($activity->waktu)->format('d F Y H:i:s').'</td> <td> <button type="button" class="btn btn-sm waves-effect waves-light btn-danger delete-btn"  id="sa-confirm" data-id="' . $activity->id . '"> <i class="ti ti-trash"></i> </button> </td> </tr>',
+                'list' => '<ul> <li> &bull;&nbsp;&nbsp;&nbsp;' .$activity->aktivitas .'-'. Carbon::parse($activity->waktu)->format('d F Y H:i:s').'</li></ul>',
+            ];
+        });
+
         $arr = [
-            'reservasi_id' => $firstReservasi->id,
-            'tour_code' => $firstReservasi->tour_code,
-            'tour_date' => $firstReservasi->tour_date,
-            'dob' => $firstReservasi->dob,
-            'guest_name' => $firstReservasi->guest_name,
-            'contact' => $firstReservasi->contact,
-            'activity' => $activityHtml,
-            'activity_id' => $activityIdList,
-            'tbody' => $tbody,
+            'reservasi_id' => $firstReservasi->id ?? '',
+            'tour_code' => $firstReservasi->tour_code ?? '',
+            'tour_date' => $firstReservasi->tour_date ?? '',
+            'dob' => $firstReservasi->dob ?? '',
+            'guest_name' => $firstReservasi->guest_name ?? '',
+            'contact' => $firstReservasi->contact ?? '',
+            'activity' => $datas, 
         ];
+
         return response()->json($arr);
     }
+
+
 
     public function destroy($id)
     {
         $activity = ReservasiActivities::find($id);
-        
+
         if ($activity) {
             $activity->delete();
             return response()->json(['message' => 'Data deleted successfully.']);
@@ -112,6 +106,7 @@ class ActivityController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'aktivitas' => 'required|string|max:255',
+            'waktu' => 'required|date',
             'reservasi_id' => 'required|string|max:255',
         ]);
 
@@ -125,6 +120,7 @@ class ActivityController extends Controller
         try{  
             $activity = ReservasiActivities::create([
                 'aktivitas' => $request->aktivitas,
+                'waktu' => $request->waktu,
                 'reservasi_id' => $request->reservasi_id,
             ]);
 
@@ -151,7 +147,7 @@ class ActivityController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
-        
+
         try {
             $activity = ReservasiActivities::findOrFail($id);
 

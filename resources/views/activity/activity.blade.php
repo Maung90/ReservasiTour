@@ -49,6 +49,7 @@
         <tr>
           <th>Tour Code</th>
           <th>Aktivitas</th>
+          <th>Waktu</th>
           <th>Aksi</th>
         </tr>
       </thead>
@@ -57,6 +58,7 @@
     </table>
     <x-input id="reservasi_id" type="hidden" name="reservasi_id"></x-input>
     <x-input id="aktivitas" type="text" name="aktivitas">Aktivitas baru</x-input>
+    <x-input id="waktu" type="datetime-local" name="waktu">Waktu</x-input>
   </div>
 </x-modal>
 <!-- tutup modal update activity -->
@@ -98,7 +100,12 @@
         $('#tour_date-info').text(data.tour_date);
         $('#guest_name-info').text(data.guest_name);
         $('#contact-info').text(data.contact);
-        $('#activity-info').html(data.activity);
+        let listInfo = document.getElementById("activity-info");
+        listInfo.innerHTML = '';
+        data.activity.forEach(activity => {
+        // $('#activity-info').html(activity.list);
+          listInfo.innerHTML += activity.list;
+        });
 
         $('#loading-info').addClass('d-none');
         $('#table-info').removeClass('d-none');
@@ -129,7 +136,12 @@
         $('#loading-modal-edit').addClass('d-none');
 
         let data = response;
-        $('#activity_update').html(data.tbody);
+        let tableBody = document.getElementById("activity_update");
+        tableBody.innerHTML = '';
+        data.activity.forEach(activity => {
+          tableBody.innerHTML += activity.tbody;
+        });
+
         $('#reservasi_id').val(data.reservasi_id);
 
         $('#edit-modal').modal('show');

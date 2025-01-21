@@ -11,6 +11,7 @@ class ReservasiActivities extends Model
     use HasFactory;
     protected $fillable = [
         'aktivitas',
+        'waktu',
         'reservasi_id',
     ];
      public function reservasi()
