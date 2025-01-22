@@ -196,7 +196,14 @@
                 })
                 .then(data => {
                     console.log('Status updated on server:', data.message);
-                    alert('Pembayaran berhasil! Status tagihan diperbarui.');
+                    Swal.fire({
+                        title: 'Success!',
+                        text: 'Pembayaran telah berhasil!',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    });
+                    window.location = '/tagihan';
+                    // alert('Pembayaran berhasil! Status tagihan diperbarui.');
                 })
                 .catch(error => {
                     console.error('Error updating payment status:', error);

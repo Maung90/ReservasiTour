@@ -23,6 +23,9 @@ use App\Http\Middleware\EnsureAuthenticated;
 Route::get('/', function () {
     return view('auth/login');
 });
+Route::get('/not-found', function () {
+    return view('auth/notFound');
+});
 
 Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'login');
@@ -40,7 +43,7 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
     }); 
 });
 
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class . ":1,3 ")->group(function () {
     Route::controller(ActivityController::class)->group(function () {
         Route::get('/activity/table/activity', 'tableActivity')->name('activity.tableActivity');
         Route::get('/activity', 'activity');
@@ -53,7 +56,7 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
 });
 
 
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class. ":1,3 ")->group(function () {
     Route::controller(VendorController::class)->group(function () {
         Route::get('/vendor/table/vendor', 'tableVendor')->name('Vendor.tableVendor');
         Route::get('/vendor', 'vendor');
@@ -66,7 +69,7 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
 });
 
 
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class. ":1,3 ")->group(function () {
     Route::controller(SopirController::class)->group(function () {
         Route::get('/sopir/table/sopir', 'tableSopir')->name('sopir.tableSopir');
         Route::get('/sopir', 'sopir');
@@ -77,7 +80,7 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
         Route::delete('/sopir/{id}', 'destroy')->name('sopir.destroy');
     });
 });
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class . ":1,3 ")->group(function () {
     Route::controller(BahasaController::class)->group(function () {
         Route::get('/bahasa/table/bahasa', 'tableBahasa')->name('bahasa.tableBahasa');
         Route::get('/bahasa', 'bahasa');
@@ -90,7 +93,7 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
     });
 });
 
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class . ":1 ")->group(function () {
     Route::controller(UserController::class)->group(function () {
         Route::get('/user/table/user', 'tableUser')->name('user.tableUser');
         Route::get('/user', 'user');
@@ -101,7 +104,7 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
         Route::delete('/user/{id}', 'destroy')->name('user.destroy');
     });
 });
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class . ":1,3 ")->group(function () {
     Route::controller(KendaraanController::class)->group(function () {
         Route::get('/kendaraan/table/kendaraan', 'tableKendaraan')->name('kendaraan.tableKendaraan');
         Route::get('/kendaraan', 'kendaraan');
@@ -112,7 +115,7 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
         Route::delete('/kendaraan/{id}', 'destroy')->name('kendaraan.destroy');
     });
 });
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class . ":1,3 ")->group(function () {
     Route::controller(GuideController::class)->group(function () {
         Route::get('/guide/table/guide', 'tableGuide')->name('guide.tableGuide');
         Route::get('/guide', 'guide');
@@ -138,7 +141,7 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
         Route::delete('/reservasi/{id}', 'destroy')->name('reservasi.destroy');
     });
 });
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class . ":1,3,4,5 ")->group(function () {
     Route::controller(TagihanController::class)->group(function () {
         Route::get('/tagihan', 'tagihan');
         Route::get('/tagihan/table/tagihan', 'tabletagihan')->name('tagihan.tableTagihan');
@@ -152,9 +155,9 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
 });
 Route::post('/tagihan/callback', [TagihanController::class, 'handlePaymentCallback']);
 
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class . ":1,2,3 ")->group(function () {
     Route::controller(ProgramController::class)->group(function () {
-        Route::get('/guide/table/program', 'tableProgram')->name('program.tableProgram');
+        Route::get('/program/table/program', 'tableProgram')->name('program.tableProgram');
         Route::get('/program', 'program');
 
         Route::post('/program', 'store')->name('program.store'); 
@@ -164,9 +167,9 @@ Route::middleware(EnsureAuthenticated::class)->group(function () {
     });
 });
 
-Route::middleware(EnsureAuthenticated::class)->group(function () {
+Route::middleware(EnsureAuthenticated::class . ":1,2,3 ")->group(function () {
     Route::controller(ProdukController::class)->group(function () {
-        Route::get('/guide/table/produk', 'tableProduk')->name('produk.tableProduk');
+        Route::get('/program/table/produk', 'tableProduk')->name('produk.tableProduk');
         Route::get('/produk', 'produk');
 
         Route::post('/produk', 'store')->name('produk.store'); 
