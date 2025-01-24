@@ -71,9 +71,9 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-center">
+                                <div class="d-none align-items-center justify-content-center">
                                     <p class="fs-4 mb-0 fw-medium">Forgot Password ?</p>
-                                    <a class="text-primary fw-medium ms-2" href="./authentication-register.html">Create new password</a>
+                                    <a class="text-primary fw-medium ms-2" href="0">Create new password</a>
                                 </div>
                             </form>
                         </div>

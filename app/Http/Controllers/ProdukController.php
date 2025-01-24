@@ -131,7 +131,7 @@ class ProdukController extends Controller
             'harga' => 'required|numeric',
             'area' => 'required|string|max:255',
             'deskripsi' => 'required|string|max:50',
-            'tipe_produk' => 'required|in:transport, hotel, restaurant, tourist_attraction, etc',
+            'tipe_produk' => 'required',
             'vendor_id' => 'required|exists:vendors,id',
         ]);
 

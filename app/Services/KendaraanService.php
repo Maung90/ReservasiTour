@@ -8,6 +8,6 @@ class KendaraanService
 {
     public function getKendaraan()
     {
-        return Kendaraan::all();
+        return Kendaraan::all()->where('status', 'available');
     }
 }

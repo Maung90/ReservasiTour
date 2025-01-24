@@ -79,6 +79,7 @@
         <select class="form-control" id="guide_id-edit" name="guide_id">
           <option disabled selected>Select Guide</option>
           @foreach($guides as $guide):
+            
           <option value="{{$guide->id}}"> {{ $guide->nama_guide }} - {{ $guide->bahasa->pluck('bahasa.nama_bahasa')->join(', ') }}</option>
           @endforeach
         </select>

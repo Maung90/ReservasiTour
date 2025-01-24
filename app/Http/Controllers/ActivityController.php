@@ -48,7 +48,7 @@ class ActivityController extends Controller
             $role_id = auth()->user()->role_id;
 
             $buttons = '<button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-success info-btn" data-id="'.$row->reservasi_id.'" data-bs-toggle="modal" data-bs-target="#info-modal"> <i class="ti ti-info-circle"></i></button>';
-            if ($role_id == 1) {   
+            if ($role_id == 1 || $role_id == 3) {   
                 $buttons .= '
                 <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->reservasi_id.'" data-bs-toggle="modal" data-bs-target="#edit-modal"> <i class="ti ti-pencil"></i> </button>';
             }

@@ -49,7 +49,7 @@ class TagihanController extends Controller
             <a class="capitalize btn btn-sm waves-effect waves-light btn-primary pay-btn" href="'.route('tagihan.payment',$row->id).'">
             <i class="ti ti-credit-card"></i>
             </a>';
-            if ($user->role_id == 4 || $user->role_id == 1) {
+            if ($user->role_id == 4 && $row->status != 'paid'|| $user->role_id == 1) {
                 $buttons .= '
                 <button type="button" class="capitalize btn btn-sm waves-effect waves-light btn-warning edit-btn" data-id="'.$row->id.'" data-bs-toggle="modal" data-bs-target="#edit-modal">
                 <i class="ti ti-pencil"></i>

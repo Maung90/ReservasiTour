@@ -281,7 +281,7 @@
 																	</p>
 																</div>
 															</div>
-															<div class="message-body">
+															<div class="message-body d-none">
 																<a href="{{ url('/profile') }}" class="py-8 mt-8 px-7 d-flex align-items-center">
 																	<span class="p-6 d-flex align-items-center justify-content-center bg-light rounded-1">
 																		<img src="{{ asset('assets/images/svgs/icon-account.svg') }}" alt="" width="24" height="24">
